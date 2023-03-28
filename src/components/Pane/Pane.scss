@@ -1,0 +1,7 @@
+@use "../../styles/globals.scss" as g;
+
+.pane {
+  background-color: g.$pane-background-color;
+  border-radius: g.$common-border-radius;
+  padding: .6rem 1rem;
+}

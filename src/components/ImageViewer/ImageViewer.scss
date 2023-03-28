@@ -1,0 +1,9 @@
+@use "../../styles/globals.scss" as g;
+
+.image-viewer {
+  height: calc(100vh - g.$app-padding-top - g.$app-body-padding - g.$app-body-padding);
+}
+
+.implementation-details {
+  display: none;
+}

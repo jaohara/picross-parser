@@ -1,0 +1,20 @@
+// common sizes/variables
+$common-border-radius: 4px;
+$common-box-shadow: 0px 4px 4px rgba(25,25,25,0.25);
+
+// specific sizes
+$app-padding-top: 3.8rem;
+$app-body-padding: .5rem;
+
+// colors (specific)
+$dark-gray-100: #626466;
+$dark-gray-200: #4c4e50;
+$dark-gray-300: #353638;
+$light-gray-100: #edeff2;
+$light-gray-200: #d8dbde;
+$light-gray-300: #c8cbce;
+
+// colors (role)
+$app-background-color: $light-gray-300;
+$pane-background-color: $light-gray-100;
+$control-bar-background-color: $pane-background-color;

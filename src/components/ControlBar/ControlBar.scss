@@ -1,0 +1,23 @@
+@use "../../styles/globals.scss" as g;
+
+.control-bar {
+  background-color: g.$control-bar-background-color;
+  border-radius: g.$common-border-radius;
+  left: g.$app-body-padding;
+  padding: 1rem 1rem;
+  position: fixed;
+  top: g.$app-body-padding;
+  width: calc(100vw - g.$app-body-padding - g.$app-body-padding);
+}
+
+.logo {
+  font-weight: bold;
+  font-size: 1.8rem;
+  line-height: 1rem;
+}
+
+.grid-icon {
+  margin-right: 1rem;
+  transform: scale(1.6);
+  width: 1rem;
+}

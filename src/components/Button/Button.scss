@@ -1,0 +1,5 @@
+@use "../../styles/globals.scss" as g;
+
+.app-button {
+  border-radius: g.$common-border-radius;
+}

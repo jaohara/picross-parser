@@ -1,0 +1,27 @@
+@use "./globals.scss" as g;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;700&family=JetBrains+Mono:wght@300&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: "Inter Tight", sans-serif;
+}
+
+body {
+  margin: 0;
+}
+
+.App {
+  background-color: g.$app-background-color;
+  padding-top: g.$app-padding-top;
+}
+
+.app-body {
+  display: flex;
+  justify-content: space-between;
+  padding: g.$app-body-padding;
+
+  .pane {
+    width: 49vw;
+  }
+}
