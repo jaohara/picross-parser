@@ -1,16 +1,28 @@
 import React from 'react';
 
+// import 
+
 import "./ImageMetadata.scss";
 
 import Pane from '../Pane/Pane';
 
-const ImageMetadata = () => {
+const ImageMetadata = ({ imageError }) => {
   return ( 
     <Pane className="image-metadata">
-      <p>
-        I'm the container that has all of the image metadata.
-      </p>
+      {
+        imageError && (
+          <ImageErrorMessage message={imageError} />
+        )
+      }
     </Pane>
+  );
+}
+
+function ImageErrorMessage ({ message }) {
+  return (
+    <div className="image-error-message">
+      {message}
+    </div>
   );
 }
  

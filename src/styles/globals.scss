@@ -1,9 +1,13 @@
 // common sizes/variables
-$common-border-radius: 4px;
+$common-border-radius: 12px;
 $common-box-shadow: 0px 4px 4px rgba(25,25,25,0.25);
+$common-padding: 1rem;
+
+// transition times
+$ui-fast-transition: 100ms;
 
 // specific sizes
-$app-padding-top: 3.8rem;
+$app-padding-top: 5rem;
 $app-body-padding: .5rem;
 
 // colors (specific)
@@ -13,8 +17,21 @@ $dark-gray-300: #353638;
 $light-gray-100: #edeff2;
 $light-gray-200: #d8dbde;
 $light-gray-300: #c8cbce;
+$light-gray-400: #a4a9ae;
+$red-100: #ff6666;
+$red-200: #c43939;
+$red-300: #c02a2a;
 
 // colors (role)
-$app-background-color: $light-gray-300;
+$app-background-color: $light-gray-200;
+// should be darker than $app-background-color; used for highlighting active areas
+$border-highlight-color: $light-gray-300;
+// $button-background-color: $light-gray-200;
+$button-background-color: transparent;
+$button-border-color: $light-gray-200;
+$button-hover-background-color: $light-gray-200;
+$error-message-background-color: $red-100;
+$error-message-border-color: $red-300;
+$error-message-font-color: $error-message-border-color;
 $pane-background-color: $light-gray-100;
 $control-bar-background-color: $pane-background-color;

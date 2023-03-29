@@ -1,1 +1,9 @@
 @use "../../styles/globals.scss" as g;
+
+.image-error-message {
+  background-color: g.$error-message-background-color;
+  border: 3px solid g.$error-message-border-color;
+  border-radius: g.$common-border-radius;
+  font-weight: bold;
+  padding: g.$common-padding;
+}

@@ -7,3 +7,61 @@
 .implementation-details {
   display: none;
 }
+
+.drop-zone {
+  align-items: center;
+  // background-color: transparent;
+  // background-color: greenyellow;
+  border: 2px solid g.$app-background-color;
+  border-radius: g.$common-border-radius;
+  display: flex;
+  flex-direction: column;
+  height: 50%;
+  justify-content: center;
+  transition: 
+    background-color g.$ui-fast-transition, 
+    border g.$ui-fast-transition;
+  width: 100%;
+
+  &.active, &:hover:not(.has-image) {
+    background-color: g.$app-background-color;
+    // border: 2px solid g.$border-highlight-color;
+    // background-color: red;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+
+  &.has-image {
+    border-color: transparent;
+  }
+}
+
+.drop-message {
+  text-align: center;
+
+  &.has-image {
+    display: none;
+  }
+}
+
+.drop-message-icon-wrapper {
+  svg {
+    font-size: 10rem;
+  }
+}
+
+.loaded-image-wrapper {
+  background-color: blue;
+  width: 100%;
+}
+
+.loaded-image {
+  border-radius: g.$common-border-radius;
+  // background-color: red;
+  max-height: 100%;
+  object-fit: contain;
+  width: 100%;
+}
