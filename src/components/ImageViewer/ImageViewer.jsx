@@ -23,10 +23,12 @@ const IMAGE_MAX_DIMENSIONS = {
 
 const ImageViewer = ({
   currentImageUrl,
+  hasImage,
   imageError,
   resetImageError,
   setImageError,
   updateCurrentImageUrl,
+  windowWidth,
 }) => {
   // callback for useDropzone to handle dropped files
   const onDrop = useCallback(acceptedFiles => {
@@ -76,14 +78,16 @@ const ImageViewer = ({
     maxFiles: 1,
   });
 
-  // check for whether or not an image is currently displayed
-  const hasImage = currentImageUrl && currentImageUrl.length > 0;
-
   const getDropZoneClassNameString = () => `
     drop-zone 
     ${isDragActive ? "active" : ""} 
     ${hasImage ? "has-image ": ""} 
   `;
+
+  // useEffect for window resizing
+  useEffect(() => {
+    console.log("window.innerWidth is: ", windowWidth);
+  }, [windowWidth]);
 
   useEffect(() => {
     // first render useEffect for testing stuff
@@ -161,8 +165,15 @@ function DropMessage({
 }
 
 function LoadedImage ({ imageUrl }) {
-  const LOADED_IMAGE_BG_COLOR = "#ff0000";
+  const DEFAULT_CANVAS_SIZE = 400;
   const FILL_BACKGROUND_ON_IMAGE_LOAD = true;
+  const LOADED_IMAGE_BG_COLOR = "#ff0000";
+  
+  // state to store the size of an edge of the canvas (currently a square
+  const [ canvasSize , setCanvasSize ] = useState({
+    h: DEFAULT_CANVAS_SIZE,
+    w: DEFAULT_CANVAS_SIZE,
+  });
 
   // a ref to store the generated <canvas> element
   const canvasRef = useRef(null);
@@ -175,26 +186,46 @@ function LoadedImage ({ imageUrl }) {
     ctx.fillStyle = previousFillStyle;
   }
 
+  const drawImage = () => {
+    const displayCanvas = canvasRef.current;
+    const displayCtx = displayCanvas.getContext('2d');
+    const img = new Image();
+    const imgCanvas = new Canvas();
+
+    img.src = imageUrl;
+
+    img.onload = () => {
+      // put image on the imgCanvas to extract colors
+      imgCanvas.height = img.height;
+      imgCanvas.width = img.width;
+      imgCanvas.drawImage(img, 0, 0);
+
+      // clear the canvas
+      displayCtx.clearRect(0, 0, displayCanvas.width, displayCanvas.height);
+
+      if (FILL_BACKGROUND_ON_IMAGE_LOAD) {
+        fillCanvasBackground(displayCanvas);
+      }
+
+      // TODO: here's where things get complicated
+      /*
+        Instead of just drawing the image, what we want to do is this:
+
+          - check the current size of the canvas
+          - check the size of the image
+          - determine what one pixel in the image maps to on the canvas
+          - render that scaled up image, with 
+      */
+
+      // draw the image
+      displayCtx.drawImage(img, 0, 0);
+    };
+  }
+
   // an effect to fire when the imageUrl changes
   useEffect(() => {
     if (imageUrl) {
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext('2d');
-
-      const img = new Image();
-      img.src = imageUrl;
-  
-      img.onload = () => {
-        // clear the canvas
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        if (FILL_BACKGROUND_ON_IMAGE_LOAD) {
-          fillCanvasBackground(canvas);
-        }
-
-        // draw the image
-        ctx.drawImage(img, 0, 0);
-      };
+      drawImage();
     }
     else {
       const canvas = canvasRef.current;
@@ -222,8 +253,8 @@ function LoadedImage ({ imageUrl }) {
           <canvas 
             ref={canvasRef}
             //hardcoded for now
-            height="256"
-            width="256"
+            height={canvasSize.h}
+            width={canvasSize.w}
           />
         )
       }
