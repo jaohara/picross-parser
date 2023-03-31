@@ -26,6 +26,7 @@ const ImageViewer = ({
   currentImageUrl,
   hasImage,
   imageError,
+  puzzleData,
   resetImageError,
   setImageError,
   setPuzzleData,
@@ -103,13 +104,13 @@ const ImageViewer = ({
 
           // if it doesn't exist, add it and get the new index
           if (pixelColorIndex === -1) {
-            pixelColorIndex = parsedColors.push(pixelColor);
+            pixelColorIndex = parsedColors.push(pixelColor) - 1;
           }
 
           // now pixelColorIndex is a valid index, append the index
           pixelString += pixelColorIndex;
           
-          // if we knew whether this square was part of the b&w puzzle, we could 
+          // TODO: if we knew whether this square was part of the b&w puzzle, we could 
           //  append the symbol (x? asterisk?) to indicate, but skip for now.
 
           // add pixelString to puzzleData
@@ -185,7 +186,7 @@ const ImageViewer = ({
         {
           hasImage && (
             <Board 
-              // puzzleData={}
+              puzzleData={puzzleData}
             />
           )
         }
@@ -198,20 +199,6 @@ const ImageViewer = ({
           height={20}
           width={20}
         />
-      </div>
-
-      <div className="implementation-details">
-        <p>
-          I'm the drag-and-drop box that you can drop an image in.
-        </p>
-
-        <h1>Needs:</h1>
-        <ul>
-          <li>Drag and drop area for inputting an image</li>
-          <li>A way to pass the image data back up to the global app state</li>
-          <li>A canvas element to render the scaled-up image</li>
-          <li>Probably a hidden image/canvas to store a non-scaled version of the image</li>
-        </ul>
       </div>
     </Pane>
   );

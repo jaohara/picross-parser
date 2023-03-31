@@ -57,6 +57,7 @@ function App() {
           currentImageUrl={currentImageUrl}
           hasImage={hasImage}
           imageError={imageError}
+          puzzleData={puzzleData}
           resetImageError={resetImageError}
           setPuzzleData={setPuzzleData}
           setImageError={setImageError}

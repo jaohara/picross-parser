@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import "./Board.scss";
 
 const PUZZLE_FILL_CHAR = "*";
+const PUZZLE_SQUARE_DELIMITER = ","
 
 const TEMP_PUZZLE_DATA = {
   colors: [
@@ -49,7 +50,35 @@ const TEMP_PUZZLE_DATA = {
 const Board = ({
   puzzleData = TEMP_PUZZLE_DATA,
 }) => {
-  const { puzzle, colors } = puzzleData;
+  const { colors } = puzzleData;
+
+  // parse the puzzle array form the string
+  const puzzle = (() => {
+    // for demo examples where the data comes in as an already parsed array
+    if (Array.isArray(puzzleData.puzzle)) {
+      return puzzleData.puzzle;
+    }
+
+    // assuming it has a valid height/width properties
+    const { height, width } = puzzleData;
+    const result = [];
+
+    const splitPuzzleData = puzzleData.puzzle.split(PUZZLE_SQUARE_DELIMITER);
+    let squareIndex = 0;
+
+    // WARNING: you might be crossing up the x/y here; make sure to check
+    for (let y = 0; y < height; y++) {
+      result.push([]);
+
+      for (let x = 0; x < width; x++) {
+        result[y][x] = splitPuzzleData[squareIndex];
+        squareIndex++;
+      }
+    }
+
+    return result;
+  })();
+
 
   const puzzleIsValid = () => puzzle && Array.isArray(puzzle) && puzzle.length > 0;
 
@@ -60,10 +89,8 @@ const Board = ({
       return "#FF0000";
     }
 
-    console.log(`getColorFromSquareData: getting color from ${squareData}...`)
+    console.log(`getColorFromSquareData: getting color from ${squareData}...`);
 
-    // write assuming there is no colon (example) first, and then 
-    // also check if there is a colon. 
     if (!squareData.includes(":")) {
       return colors[squareData];
     }
@@ -74,8 +101,13 @@ const Board = ({
     if (!squareData.includes(PUZZLE_FILL_CHAR)) {
       return colors[colorIndex];
     }
-    // remember to handle "X" or "*" for filled space 
+
+    // remember to handle "X" or "*" for filled space (saved as PUZZLE_FILL_CHAR)
   };
+
+  useEffect(() => {
+    console.log("Board: Received puzzleData: ", puzzleData);
+  }, []);
 
   return ( 
     <div className="board board-wrapper">
@@ -120,8 +152,8 @@ function Square ({
   squareData,
 }) {
   // maybe calculate this based on current screen width?
-  const squareSize = 48;
-  const borderRadius = 12;
+  const squareSize = 32;
+  const borderRadius = 8;
 
   return (
     <div className="board-square">
