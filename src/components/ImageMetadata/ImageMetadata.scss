@@ -5,5 +5,11 @@
   border: 2px solid g.$error-message-border-color;
   border-radius: g.$common-border-radius;
   font-weight: bold;
+  margin-bottom: g.$common-margin;
   padding: g.$common-padding;
+}
+
+.puzzle-data-temp {
+  font-family: g.$mono-font;
+  word-wrap: break-word;
 }

@@ -2,6 +2,11 @@
 $common-border-radius: 12px;
 $common-box-shadow: 0px 4px 4px rgba(25,25,25,0.25);
 $common-padding: 1rem;
+$common-margin: 1rem;
+
+// fonts
+$body-font: "Inter Tight";
+$mono-font: "JetBrains Mono";
 
 // transition times
 $ui-fast-transition: 100ms;
@@ -35,3 +40,9 @@ $error-message-border-color: $red-200;
 $error-message-font-color: $error-message-border-color;
 $pane-background-color: $light-gray-100;
 $control-bar-background-color: $pane-background-color;
+
+// $a: #65ff0ff
+// #71821ff
+// #e0f8cfff
+// #86c06cff
+// #306850ff

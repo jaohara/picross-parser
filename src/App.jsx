@@ -13,6 +13,7 @@ import ImageViewer from "./components/ImageViewer/ImageViewer";
 function App() {
   // maybe make this handled by a hook?
   const [ currentImageUrl, setCurrentImageUrl ] = useState("");
+  const [ puzzleData, setPuzzleData ] = useState(null);
   const [ imageError, setImageError ] = useState(null);
   const [ windowWidth, setWindowWidth ] = useState(window.innerWidth);
 
@@ -24,6 +25,8 @@ function App() {
   const resetImage = useCallback(() => {
     // probably needs more logic?
     setCurrentImageUrl("");
+    setPuzzleData(null);
+    setImageError(null);
   }, [setCurrentImageUrl]);
 
   const hasImage = currentImageUrl && currentImageUrl.length > 0;
@@ -55,12 +58,14 @@ function App() {
           hasImage={hasImage}
           imageError={imageError}
           resetImageError={resetImageError}
+          setPuzzleData={setPuzzleData}
           setImageError={setImageError}
           updateCurrentImageUrl={updateCurrentImageUrl}
           windowWidth={windowWidth}
         />
         <ImageMetadata
           imageError={imageError}
+          puzzleData={puzzleData}
         />
       </div>
     </div>

@@ -13,6 +13,7 @@ import {
 
 import "./ImageViewer.scss";
 
+import Board from '../Board/Board';
 import Pane from '../Pane/Pane';
 
 // set to adjust the max dimensions for a picross image
@@ -27,9 +28,13 @@ const ImageViewer = ({
   imageError,
   resetImageError,
   setImageError,
+  setPuzzleData,
   updateCurrentImageUrl,
   windowWidth,
 }) => {
+  // the canvas ref for the parseCanvas
+  const parseCanvasRef = useRef(null);
+
   // callback for useDropzone to handle dropped files
   const onDrop = useCallback(acceptedFiles => {
     // Now you can do something with "acceptedFiles"
@@ -41,27 +46,92 @@ const ImageViewer = ({
     }
 
     // pull the image from the acceptedFiles
-    const image = acceptedFiles[0];
-    const imageUrl = URL.createObjectURL(image);
+    const imageFile = acceptedFiles[0];
+    const imageUrl = URL.createObjectURL(imageFile);
     console.log("ImageViewer: onDrop: created URL: ", imageUrl);
 
-    // test to see if size is within constraints (less than 20 x 20)
-    const sizeCheckImage = new Image();
-    sizeCheckImage.src = imageUrl;
+    const image = new Image();
+    const parseCanvas = parseCanvasRef.current;
+    image.src = imageUrl;
 
     // callback for remainder of logic; updateCurrentImageUrl if valid
-    sizeCheckImage.onload = () => {
+    image.onload = () => {
       const { w, h } = IMAGE_MAX_DIMENSIONS;
 
       // ensure image is less than max size
-      if (sizeCheckImage.width > w && sizeCheckImage.height > h) {
+      if (image.width > w && image.height > h) {
         console.log("ImageViewer: onDrop: setting imageError...");
         setImageError(`Image must be ${w}x${h} or smaller.`);
         return;
       }
 
+      // Parse the puzzle
+      parseCanvas.width = image.width;
+      parseCanvas.height = image.height;
+      const ctx = parseCanvas.getContext('2d');
+      ctx.drawImage(image, 0, 0);
+
+      const parsedColors = [];
+      const puzzleData = [];
+
+      // should I count the indexes as well?
+      let pixelCount = 0;
+
+
+      const parseColorItem = (item) => {
+        let result = item.toString(16);
+        return result.length === 1 ? `0${result}` : result;
+      }
+
+      // iterate through every pixel
+      for (let y = 0; y < image.height; y++) {
+        for (let x = 0; x < image.width; x++) {
+          // data is pixel color as array in [r, g, b, a] format
+          const { data } = ctx.getImageData(x, y, 1, 1);
+          // const r = data[0].toString(16);
+          const r = parseColorItem(data[0]);
+          // const g = data[1].toString(16);
+          const g = parseColorItem(data[1]);
+          // const b = data[2].toString(16);
+          const b = parseColorItem(data[2]);
+          // const a = data[3].toString(16);
+          const a = parseColorItem(data[3]);
+          const pixelColor = `#${r}${g}${b}${a}`;
+
+          let pixelColorIndex = parsedColors.indexOf(pixelColor);
+          let pixelString = `${pixelCount}:`;
+
+          // if it doesn't exist, add it and get the new index
+          if (pixelColorIndex === -1) {
+            pixelColorIndex = parsedColors.push(pixelColor);
+          }
+
+          // now pixelColorIndex is a valid index, append the index
+          pixelString += pixelColorIndex;
+          
+          // if we knew whether this square was part of the b&w puzzle, we could 
+          //  append the symbol (x? asterisk?) to indicate, but skip for now.
+
+          // add pixelString to puzzleData
+          puzzleData.push(pixelString);
+          pixelCount++;
+        }
+      }
+
+      const puzzleString = puzzleData.join();
+
+      const puzzle = {
+        author: "Puzzle creator",
+        colors: parsedColors,
+        height: image.height,
+        name: "New Puzzle",
+        puzzle: puzzleString,
+        width: image.width,
+      };
+
       resetImageError();
       updateCurrentImageUrl(imageUrl);
+      setPuzzleData(puzzle);
     };
     // empty dependency array
   }, []);
@@ -107,10 +177,27 @@ const ImageViewer = ({
           isDragActive={isDragActive} 
         />
 
-        <LoadedImage
+        {/* I might not need this component going forward */}
+        {/* <LoadedImage
           imageUrl={currentImageUrl}
-        />
+        /> */}
 
+        {
+          hasImage && (
+            <Board 
+              // puzzleData={}
+            />
+          )
+        }
+
+        {/* The hidden parseCanvas for loading the image */}
+        <canvas
+          className='parse-canvas'
+          ref={parseCanvasRef}
+          // arbitrary; resized in onDrop 
+          height={20}
+          width={20}
+        />
       </div>
 
       <div className="implementation-details">
@@ -190,15 +277,15 @@ function LoadedImage ({ imageUrl }) {
     const displayCanvas = canvasRef.current;
     const displayCtx = displayCanvas.getContext('2d');
     const img = new Image();
-    const imgCanvas = new Canvas();
+    // const imgCanvas = new Canvas();
 
     img.src = imageUrl;
 
     img.onload = () => {
       // put image on the imgCanvas to extract colors
-      imgCanvas.height = img.height;
-      imgCanvas.width = img.width;
-      imgCanvas.drawImage(img, 0, 0);
+      // imgCanvas.height = img.height;
+      // imgCanvas.width = img.width;
+      // imgCanvas.drawImage(img, 0, 0);
 
       // clear the canvas
       displayCtx.clearRect(0, 0, displayCanvas.width, displayCanvas.height);
@@ -242,12 +329,6 @@ function LoadedImage ({ imageUrl }) {
 
   return (
     <>
-      {/* <img 
-        alt="Loaded Image"
-        className={getClassNamesString()}
-        id="loaded-image"
-        src={imageUrl}
-      /> */}
       { 
         imageUrl && (
           <canvas 

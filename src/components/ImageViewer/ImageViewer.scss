@@ -65,3 +65,9 @@
   object-fit: contain;
   width: 100%;
 }
+
+.parse-canvas { 
+  // hidden to not affect layout, but still exist in the rendered DOM
+  left: -9999px;
+  position: absolute;
+}
