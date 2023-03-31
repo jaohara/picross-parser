@@ -151,9 +151,13 @@ function Square ({
   color = "#FF0000", 
   squareData,
 }) {
+  const borderColor = "#35363866";
+  const containerPadding = 4;
+  const strokeWidth = 2;
+
   // maybe calculate this based on current screen width?
   const squareSize = 32;
-  const borderRadius = 8;
+  const borderRadius = 6;
 
   return (
     <div className="board-square">
@@ -161,8 +165,8 @@ function Square ({
       {/* {squareData} */}
 
       <svg
-        height={squareSize}
-        width={squareSize}
+        height={squareSize + (2 * containerPadding)}
+        width={squareSize + (2 * containerPadding)}
       >
         <rect
           height={squareSize}
@@ -170,7 +174,11 @@ function Square ({
           rx={borderRadius}
           style={{
             fill: color,
+            stroke: borderColor,
+            strokeWidth: strokeWidth, 
           }}
+          x={containerPadding}
+          y={containerPadding}
         />
       </svg>
     </div>

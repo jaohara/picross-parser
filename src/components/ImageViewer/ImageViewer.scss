@@ -16,7 +16,7 @@
   border-radius: g.$common-border-radius;
   display: flex;
   flex-direction: column;
-  height: 50%;
+  height: 100%;
   justify-content: center;
   transition: 
     background-color g.$ui-fast-transition, 
@@ -36,6 +36,10 @@
 
   &.has-image {
     border-color: transparent;
+
+    &:hover {
+      cursor: default;
+    }
   }
 }
 

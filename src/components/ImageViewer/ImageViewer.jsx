@@ -171,7 +171,10 @@ const ImageViewer = ({
         {...getRootProps()}
       >
         {/* Input box for dropped file */}
-        <input {...getInputProps()} />
+        <input 
+          {...getInputProps()} 
+          disabled={hasImage}
+        />
 
         <DropMessage 
           hasImage={hasImage}
