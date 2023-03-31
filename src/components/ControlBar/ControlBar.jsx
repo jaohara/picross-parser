@@ -32,16 +32,28 @@ function Logo () {
 }
 
 function Controls ({
-  resetImage
+  hasImage,
+  resetImage,
+  // TODO: Remove placeholder later
+  saveImage = () => { console.log("saveImage clicked!") },
 }) {
   return (
     <div className="controls-wrapper">
       <Button
+        disabled={!hasImage}
+        onClick={saveImage}
+        type="save"
+        >
+        Save Image 
+      </Button>
+      <Button
+        disabled={!hasImage}
         onClick={resetImage}
         type="clear"
       >
         Clear Image
       </Button>
+
     </div>
   )
 }

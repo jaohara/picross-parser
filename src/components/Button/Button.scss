@@ -9,12 +9,19 @@
   display: flex;
   font-size: 1rem;
   font-weight: bold;
+  opacity: 1;
   padding: .6rem 1rem;
-  transition: background-color g.$ui-fast-transition;
+  transition: 
+    background-color g.$ui-fast-transition, 
+    opacity g.$ui-fast-transition;
 
-  &:hover {
+  &:hover:not(:disabled) {
     background-color: g.$button-hover-background-color;
     cursor: pointer;
+  }
+
+  &:disabled {
+    opacity: .5;
   }
 }
 

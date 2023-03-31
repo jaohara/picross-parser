@@ -1,6 +1,8 @@
 import React from 'react';
 
 import { 
+  TbFileCode, // maybe for save?
+  TbFileDownload, // maybe for save?
   TbReload,
 } from "react-icons/tb";
 
@@ -8,11 +10,13 @@ import './Button.scss';
 
 const Button = ({
   children,
+  disabled,
   onClick,
   type = "none",
 }) => {
   const buttonIcons = {
-    "save": "REPLACEME",
+    // "save": (<TbFileCode />),
+    "save": (<TbFileDownload />),
     "clear": (<TbReload />)
   };
 
@@ -32,6 +36,7 @@ const Button = ({
 
   return (
     <button 
+      disabled={disabled}
       className="app-button"
       onClick={onClick}
     >

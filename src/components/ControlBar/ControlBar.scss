@@ -24,3 +24,11 @@
   transform: scale(1.6);
   width: 1rem;
 }
+
+.controls-wrapper {
+  display: flex;
+
+  .app-button {
+    margin-left: g.$common-margin;
+  }
+}
