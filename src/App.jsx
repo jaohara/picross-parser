@@ -14,12 +14,15 @@ import ImageViewer from "./components/ImageViewer/ImageViewer";
 // This is magic - see "On Memoized Components" note in obsidian vault
 const MemoizedImageViewer = memo(ImageViewer);
 
+const DEFAULT_AUTHOR = "Anonymous";
+const DEFAULT_NAME = "New puzzle"
+
 function App() {
   // maybe make this handled by a hook?
-  const [ author, setAuthor ] = useState("Unnamed");
+  const [ author, setAuthor ] = useState(DEFAULT_AUTHOR);
   const [ currentImageUrl, setCurrentImageUrl ] = useState("");
   const [ imageError, setImageError ] = useState(null);
-  const [ name, setName ] = useState("New puzzle");
+  const [ name, setName ] = useState(DEFAULT_NAME);
   const [ puzzleData, setPuzzleData ] = useState(null);
   const [ windowWidth, setWindowWidth ] = useState(window.innerWidth);
 
@@ -43,9 +46,11 @@ function App() {
 
   const resetImage = useCallback(() => {
     // probably needs more logic?
+    setAuthor(DEFAULT_AUTHOR);
     setCurrentImageUrl("");
+    setName(DEFAULT_NAME);
     setPuzzleData(null);
-    setImageError(null);
+    resetImageError();
   }, [setCurrentImageUrl]);
 
   const hasImage = currentImageUrl && currentImageUrl.length > 0;
@@ -78,6 +83,7 @@ function App() {
           hasImage={hasImage}
           imageError={imageError}
           puzzleData={puzzleData}
+          resetImage={resetImage}
           resetImageError={resetImageError}
           setPuzzleData={setPuzzleData}
           setImageError={setImageError}

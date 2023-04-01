@@ -27,6 +27,7 @@ const ImageViewer = ({
   hasImage,
   imageError,
   puzzleData,
+  resetImage,
   resetImageError,
   setImageError,
   setPuzzleData,
@@ -65,6 +66,8 @@ const ImageViewer = ({
         setImageError(`Image must be ${w}x${h} or smaller.`);
         return;
       }
+
+      resetImage();
 
       // Parse the puzzle
       parseCanvas.width = image.width;

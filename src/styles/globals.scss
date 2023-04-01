@@ -29,6 +29,8 @@ $red-100: #ff6666;
 $red-200: #da4c4c;
 $red-300: #c02a2a;
 
+$square-gray: #35363866;
+
 // colors (role)
 $app-background-color: $light-gray-200;
 // should be darker than $app-background-color; used for highlighting active areas
@@ -42,6 +44,8 @@ $error-message-border-color: $red-200;
 $error-message-font-color: $error-message-border-color;
 $pane-background-color: $light-gray-100;
 $control-bar-background-color: $pane-background-color;
+$square-border-color: $square-gray;
+$square-hover-color: $red-100;
 
 // $a: #65ff0ff
 // #71821ff

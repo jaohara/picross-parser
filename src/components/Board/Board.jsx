@@ -157,7 +157,7 @@ function Square ({
 
   // maybe calculate this based on current screen width?
   const squareSize = 32;
-  const borderRadius = 6;
+  const borderRadius = 4;
 
   return (
     <div className="board-square">
@@ -169,6 +169,7 @@ function Square ({
         width={squareSize + (2 * containerPadding)}
       >
         <rect
+          className="board-square-rect"
           height={squareSize}
           width={squareSize}
           rx={borderRadius}

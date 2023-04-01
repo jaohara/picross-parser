@@ -35,6 +35,8 @@
   display: flex;
   // height: 100%;
   justify-content: center;
+  transform: scale(1.0);
+  transition: g.$ui-fast-transition transform;
   width: 100%;
 
   // DEBUG
@@ -43,5 +45,20 @@
   svg {
     // height: 
     // width: 100%;
+  }
+
+  &:hover {
+    transform: scale(1.5);
+    z-index: 100;
+  }
+}
+
+.board-square-rect {
+  // transition: g.$ui-fast-transition transform;
+  // transform: scale(1.0);
+  
+  &:hover {
+    cursor: crosshair;
+    border-color: g.$square-hover-color;
   }
 }
