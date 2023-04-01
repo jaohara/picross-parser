@@ -1,4 +1,5 @@
 import { 
+  memo,
   useEffect,
   useCallback,
   useState, 
@@ -10,12 +11,30 @@ import ControlBar from "./components/ControlBar/ControlBar";
 import ImageMetadata from "./components/ImageMetadata/ImageMetadata";
 import ImageViewer from "./components/ImageViewer/ImageViewer";
 
+// This is magic - see "On Memoized Components" note in obsidian vault
+const MemoizedImageViewer = memo(ImageViewer);
+
 function App() {
   // maybe make this handled by a hook?
+  const [ author, setAuthor ] = useState("Unnamed");
   const [ currentImageUrl, setCurrentImageUrl ] = useState("");
-  const [ puzzleData, setPuzzleData ] = useState(null);
   const [ imageError, setImageError ] = useState(null);
+  const [ name, setName ] = useState("New puzzle");
+  const [ puzzleData, setPuzzleData ] = useState(null);
   const [ windowWidth, setWindowWidth ] = useState(window.innerWidth);
+
+  /* 
+    puzzleData has this form:
+
+      puzzleData = {
+        author: "Puzzle creator",
+        colors: ["hex", "color", "strings"],
+        height: 15
+        name: "New Puzzle",
+        puzzle: [["pixel", "data"], ["in", "rows"]],
+        width: 15,
+      };
+  */
 
   const resetImageError = useCallback(() => setImageError(null), [setImageError]);
 
@@ -53,7 +72,8 @@ function App() {
       />
 
       <div className="app-body">
-        <ImageViewer 
+        {/* <ImageViewer  */}
+        <MemoizedImageViewer 
           currentImageUrl={currentImageUrl}
           hasImage={hasImage}
           imageError={imageError}
@@ -65,8 +85,12 @@ function App() {
           windowWidth={windowWidth}
         />
         <ImageMetadata
+          author={author}
           imageError={imageError}
+          name={name}
           puzzleData={puzzleData}
+          setAuthor={setAuthor}
+          setName={setName}
         />
       </div>
     </div>

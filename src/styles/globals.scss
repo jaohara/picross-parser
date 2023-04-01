@@ -3,6 +3,7 @@ $common-border-radius: 12px;
 $common-box-shadow: 0px 4px 4px rgba(25,25,25,0.25);
 $common-padding: 1rem;
 $common-margin: 1rem;
+$section-header-font-size: 1.4rem;
 
 // fonts
 $body-font: "Inter Tight";
@@ -12,8 +13,9 @@ $mono-font: "JetBrains Mono";
 $ui-fast-transition: 100ms;
 
 // specific sizes
-$app-padding-top: 5rem;
+$app-padding-top: 5.4rem;
 $app-body-padding: .5rem;
+$message-icon-font-size: 10rem;
 
 // colors (specific)
 $dark-gray-100: #626466;
@@ -46,3 +48,10 @@ $control-bar-background-color: $pane-background-color;
 // #e0f8cfff
 // #86c06cff
 // #306850ff
+
+@mixin section-header-styles {
+  font-size: $section-header-font-size;
+  margin-top: 0rem;
+  padding-bottom: .5rem;
+  border-bottom: 2px solid $button-border-color;
+}

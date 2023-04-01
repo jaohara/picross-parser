@@ -60,7 +60,7 @@ const ImageViewer = ({
       const { w, h } = IMAGE_MAX_DIMENSIONS;
 
       // ensure image is less than max size
-      if (image.width > w && image.height > h) {
+      if (image.width > w || image.height > h) {
         console.log("ImageViewer: onDrop: setting imageError...");
         setImageError(`Image must be ${w}x${h} or smaller.`);
         return;
@@ -166,6 +166,13 @@ const ImageViewer = ({
 
   return ( 
     <Pane className="image-viewer">
+      {
+        hasImage && (
+          <h1 className="puzzle-grid-header">
+            Puzzle Grid
+          </h1>
+        )
+      }
       <div 
         className={getDropZoneClassNameString()} 
         {...getRootProps()}
@@ -180,6 +187,12 @@ const ImageViewer = ({
           hasImage={hasImage}
           isDragActive={isDragActive} 
         />
+
+      {
+        imageError && (
+          <ImageErrorMessage message={imageError} />
+        )
+      }
 
         {/* I might not need this component going forward */}
         {/* <LoadedImage
@@ -204,6 +217,14 @@ const ImageViewer = ({
         />
       </div>
     </Pane>
+  );
+}
+
+function ImageErrorMessage ({ message }) {
+  return (
+    <div className="image-error-message">
+      {message}
+    </div>
   );
 }
 

@@ -43,6 +43,16 @@
   }
 }
 
+.image-error-message {
+  background-color: g.$error-message-background-color;
+  border: 2px solid g.$error-message-border-color;
+  border-radius: g.$common-border-radius;
+  font-weight: bold;
+  margin-bottom: g.$common-margin;
+  padding: g.$common-padding;
+}
+
+
 .drop-message {
   text-align: center;
 
@@ -53,8 +63,12 @@
 
 .drop-message-icon-wrapper {
   svg {
-    font-size: 10rem;
+    font-size: g.$message-icon-font-size;
   }
+}
+
+.puzzle-grid-header {
+  @include g.section-header-styles();
 }
 
 .loaded-image-wrapper {

@@ -1,15 +1,73 @@
 @use "../../styles/globals.scss" as g;
 
-.image-error-message {
-  background-color: g.$error-message-background-color;
-  border: 2px solid g.$error-message-border-color;
-  border-radius: g.$common-border-radius;
-  font-weight: bold;
-  margin-bottom: g.$common-margin;
-  padding: g.$common-padding;
+
+.image-metadata {
+  align-items: center;
+  display: flex;
+  justify-content: center;
 }
 
-.puzzle-data-temp {
+.puzzle-data {
+  display: flex;
+  flex-direction: column;
   font-family: g.$mono-font;
+  height: 100%;
+  // overflow-y: scroll;
   word-wrap: break-word;
+  width: 100%;
+
+  h1 {
+    @include g.section-header-styles();
+  }
+}
+
+.no-puzzle-message {
+  text-align: center;
+
+}
+
+.no-puzzle-message-icon-wrapper {
+  font-size: g.$message-icon-font-size;
+}
+
+.color-palette {
+  // border-radius: g.$common-border-radius;
+  // border: 2px solid g.$button-border-color;
+  display: flex;
+  margin-bottom: g.$common-margin;
+  min-height: 5rem;
+  width: 100%;
+}
+
+.color-swatch {
+  align-items: center;
+  display: flex;
+  font-family: g.$mono-font;
+  font-size: .8rem;
+  font-weight: bold;
+  justify-content: center;
+  min-height: 2rem;
+  text-shadow: 1px 1px 0px #ffffffaa;
+  width: 100%;
+}
+
+.color-swatch:first-child {
+  border-bottom-left-radius: g.$common-border-radius;
+  border-top-left-radius: g.$common-border-radius;
+}
+
+.color-swatch:last-child {
+  border-bottom-right-radius: g.$common-border-radius;
+  border-top-right-radius: g.$common-border-radius;
+}
+
+.puzzle-array-display {
+  background-color: g.$app-background-color;
+  border-radius: g.$common-border-radius;
+  flex: 1 1 auto;
+  font-family: g.$mono-font;
+  font-size: .9rem;
+  font-weight: bold;
+  overflow-y: scroll;
+  padding: .6rem;
 }
