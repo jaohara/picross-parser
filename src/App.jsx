@@ -10,6 +10,7 @@ import "./styles/App.scss";
 import ControlBar from "./components/ControlBar/ControlBar";
 import ImageMetadata from "./components/ImageMetadata/ImageMetadata";
 import ImageViewer from "./components/ImageViewer/ImageViewer";
+import { devConfig, prodConfig, appEnvironment } from './firebase';
 
 // This is magic - see "On Memoized Components" note in obsidian vault
 const MemoizedImageViewer = memo(ImageViewer);
@@ -62,6 +63,13 @@ function App() {
     };
 
     window.addEventListener('resize', handleResize);
+
+
+    // TEST: output the config objects
+
+    console.log("appEnvironment: ", appEnvironment);
+    console.log("devConfig.projectId: ", devConfig.projectId);
+    console.log("prodConfig.projectId: ", prodConfig.projectId);
 
     // remove event listener when unmounted
     return () => {
