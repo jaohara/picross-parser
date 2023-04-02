@@ -68,8 +68,8 @@ function App() {
     // TEST: output the config objects
 
     console.log("appEnvironment: ", appEnvironment);
-    console.log("devConfig: ", devConfig);
-    console.log("prodConfig: ", prodConfig);
+    console.log("devConfig.appId: ", devConfig.appId);
+    console.log("prodConfig.appId: ", prodConfig.appId);
 
     // remove event listener when unmounted
     return () => {

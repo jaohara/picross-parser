@@ -42,7 +42,7 @@ jobs:
       #       echo "VITE_STORAGE_BUCKET=${{ secrets.VITE_PROD_STORAGE_BUCKET }}" >> $GITHUB_ENV
       #     fi
 
-      - env:
+        env:
           VITE_APP_ENVIRONMENT: ${{ secrets.VITE_DEV_APP_ENVIRONMENT }}
           VITE_DEV_API_KEY: ${{ secrets.VITE_DEV_API_KEY }}
           VITE_DEV_APP_ID: ${{ secrets.VITE_DEV_APP_ID }}
