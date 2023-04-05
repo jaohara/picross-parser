@@ -50,10 +50,11 @@ function App() {
     console.log(`togglePuzzleGridSquare firing on ${pixelCount}`);
     
     setPuzzleGrid(currentGrid => {
-      console.log(`Before flipping: `, currentGrid);
-      currentGrid[pixelCount] = currentGrid[pixelCount] === 1 ? 0 : 1;
-      console.log(`After flipping: `, currentGrid);
-      return currentGrid;
+      const newGrid = [...currentGrid];
+      console.log(`Before flipping: `, newGrid);
+      newGrid[pixelCount] = newGrid[pixelCount] === 1 ? 0 : 1;
+      console.log(`After flipping: `, newGrid);
+      return newGrid;
     })
   };
 
