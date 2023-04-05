@@ -48,7 +48,10 @@ const TEMP_PUZZLE_DATA = {
 };
 
 const Board = ({
+  gridViewActive,
   puzzleData = TEMP_PUZZLE_DATA,
+  puzzleGrid,
+  togglePuzzleGridSquare,
 }) => {
   const { colors } = puzzleData;
 
@@ -82,7 +85,6 @@ const Board = ({
 
   const puzzleIsValid = () => puzzle && Array.isArray(puzzle) && puzzle.length > 0;
 
-
   const getColorFromSquareData = (squareData) => {
     if (typeof squareData !== "string") {
       console.warning("getColorFromSquareData: squareData is not a string. Defaulting to #FF0000...");
@@ -105,6 +107,18 @@ const Board = ({
     // remember to handle "X" or "*" for filled space (saved as PUZZLE_FILL_CHAR)
   };
 
+  // TODO: Ultimately use this instead of getColorFromSquareData?
+  const parseSquareData = (squareData) => {
+    // squareData comes in as "pixelCount:colorIndex";
+    const splitSquareData = squareData.split(":");
+    
+    return ({
+      colorIndex: splitSquareData[1],
+      color: colors[splitSquareData[1]],
+      pixelCount: splitSquareData[0],
+    });
+  }
+
   useEffect(() => {
     console.log("Board: Received puzzleData: ", puzzleData);
   }, []);
@@ -116,8 +130,12 @@ const Board = ({
           <Row
             colors={colors}
             getColorFromSquareData={getColorFromSquareData}
+            gridViewActive={gridViewActive}
             key={`row-${index}`}
+            parseSquareData={parseSquareData}
+            puzzleGrid={puzzleGrid}
             rowData={rowData}
+            togglePuzzleGridSquare={togglePuzzleGridSquare}
           />
         ))
       }
@@ -128,7 +146,11 @@ const Board = ({
 function Row ({ 
   colors,
   getColorFromSquareData,
+  gridViewActive,
+  parseSquareData,
+  puzzleGrid,
   rowData,
+  togglePuzzleGridSquare,
 }) {
 
   // this is assuming rowData is valid
@@ -137,9 +159,14 @@ function Row ({
       {
         rowData.map((squareData, index) => (
           <Square
-            color={getColorFromSquareData(squareData)}
+            // color={getColorFromSquareData(squareData)}
+            gridViewActive={gridViewActive}
             key={`square-${index}`}
+            // isFilled={false}
+            parseSquareData={parseSquareData}
+            puzzleGrid={puzzleGrid}
             squareData={squareData}
+            togglePuzzleGridSquare={togglePuzzleGridSquare}
           />
         ))
       }
@@ -148,19 +175,44 @@ function Row ({
 }
 
 function Square ({
-  color = "#FF0000", 
+  // color = "#FF0000", 
+  gridViewActive,
+  // isFilled,
+  parseSquareData,
+  puzzleGrid,
   squareData,
+  togglePuzzleGridSquare,
 }) {
+  const { color, colorIndex, pixelCount } = parseSquareData(squareData);
+
   const borderColor = "#35363866";
   const containerPadding = 4;
+  const emptyColor = "#FFFFFF";
+  const fillColor = "#353638"
   const strokeWidth = 2;
+
+  const isFilled = puzzleGrid[pixelCount] === 1;
 
   // maybe calculate this based on current screen width?
   const squareSize = 32;
   const borderRadius = 4;
 
+  const toggleSquare = () => gridViewActive && togglePuzzleGridSquare(pixelCount);
+
+  const getSquareColor = () => {
+    if (!gridViewActive) {
+      return color;
+    }
+
+    return isFilled ? fillColor : emptyColor;
+  }
+
   return (
-    <div className="board-square">
+    <div 
+      className="board-square"
+      onClick={toggleSquare}
+      // onClick={() => console.log("Hello?")}
+    >
       {/* Just out put string for now */}
       {/* {squareData} */}
 
@@ -174,7 +226,7 @@ function Square ({
           width={squareSize}
           rx={borderRadius}
           style={{
-            fill: color,
+            fill: getSquareColor(),
             stroke: borderColor,
             strokeWidth: strokeWidth, 
           }}

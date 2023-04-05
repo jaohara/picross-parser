@@ -16,8 +16,12 @@
   word-wrap: break-word;
   width: 100%;
 
-  h1 {
+  h1, h2 {
     @include g.section-header-styles();
+  }
+
+  h2 {
+    font-size: 1.0rem;
   }
 }
 
@@ -61,7 +65,7 @@
   border-top-right-radius: g.$common-border-radius;
 }
 
-.puzzle-array-display {
+.color-array-display, .puzzle-grid-display {
   background-color: g.$app-background-color;
   border-radius: g.$common-border-radius;
   flex: 1 1 auto;
@@ -69,5 +73,14 @@
   font-size: .9rem;
   font-weight: bold;
   overflow-y: scroll;
+  margin-bottom: g.$common-margin;
   padding: .6rem;
+
+  h2 {
+    margin-bottom: 0;
+  }
+}
+
+.puzzle-grid-display {
+  margin-bottom: 0;
 }

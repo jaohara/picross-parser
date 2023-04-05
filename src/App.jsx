@@ -25,6 +25,8 @@ function App() {
   const [ imageError, setImageError ] = useState(null);
   const [ name, setName ] = useState(DEFAULT_NAME);
   const [ puzzleData, setPuzzleData ] = useState(null);
+  // TODO: Not sure if I like this name - this is the B&W grid for the puzzle
+  const [ puzzleGrid, setPuzzleGrid ] = useState([]);
   const [ windowWidth, setWindowWidth ] = useState(window.innerWidth);
 
   /* 
@@ -39,6 +41,21 @@ function App() {
         width: 15,
       };
   */
+
+  const togglePuzzleGridSquare = (pixelCount) => {
+    if (pixelCount > puzzleGrid.length){
+      return;
+    }
+
+    console.log(`togglePuzzleGridSquare firing on ${pixelCount}`);
+    
+    setPuzzleGrid(currentGrid => {
+      console.log(`Before flipping: `, currentGrid);
+      currentGrid[pixelCount] = currentGrid[pixelCount] === 1 ? 0 : 1;
+      console.log(`After flipping: `, currentGrid);
+      return currentGrid;
+    })
+  };
 
   const resetImageError = useCallback(() => setImageError(null), [setImageError]);
 
@@ -77,6 +94,16 @@ function App() {
     }
   }, []);
 
+  useEffect(() => {
+    if (!puzzleData) {
+      setPuzzleGrid([]);
+    }
+
+    puzzleData?.grid && Array.isArray(puzzleData.grid) && setPuzzleGrid(puzzleData.grid);
+  }, [puzzleData]);
+
+  const puzzleGridString = puzzleGrid.join("");
+
   return (
     <div className="App">
       <ControlBar 
@@ -91,10 +118,12 @@ function App() {
           hasImage={hasImage}
           imageError={imageError}
           puzzleData={puzzleData}
+          puzzleGrid={puzzleGrid}
           resetImage={resetImage}
           resetImageError={resetImageError}
           setPuzzleData={setPuzzleData}
           setImageError={setImageError}
+          togglePuzzleGridSquare={togglePuzzleGridSquare}
           updateCurrentImageUrl={updateCurrentImageUrl}
           windowWidth={windowWidth}
         />
@@ -103,6 +132,7 @@ function App() {
           imageError={imageError}
           name={name}
           puzzleData={puzzleData}
+          puzzleGridString={puzzleGridString}
           setAuthor={setAuthor}
           setName={setName}
         />

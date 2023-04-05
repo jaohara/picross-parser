@@ -4,6 +4,8 @@ import {
   TbFileCode, // maybe for save?
   TbFileDownload, // maybe for save?\
   TbLogin,
+  TbPuzzle,
+  TbPuzzleOff,
   TbReload,
 } from "react-icons/tb";
 
@@ -20,6 +22,8 @@ const Button = ({
     "login": (<TbLogin />),
     // "save": (<TbFileCode />),
     "save": (<TbFileDownload />),
+    "puzzle-off": (<TbPuzzleOff />),
+    "puzzle-on": (<TbPuzzle />),
   };
 
   const availableIcons = Object.keys(buttonIcons);
