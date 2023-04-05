@@ -1,4 +1,8 @@
-import React from 'react';
+import React, { 
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import {
   TbBinary,
@@ -14,6 +18,7 @@ const ImageMetadata = ({
   imageError,
   name, 
   puzzleData,
+  puzzleGridString,
   setAuthor,
   setName,
 }) => {
@@ -24,7 +29,8 @@ const ImageMetadata = ({
           <PuzzleData 
             author={author}
             name={name}
-            puzzleData={puzzleData} 
+            puzzleData={puzzleData}
+            puzzleGridString={puzzleGridString}
             setAuthor={setAuthor}
             setName={setName}
           />
@@ -51,12 +57,17 @@ function NoPuzzleMessage () {
 
 function PuzzleData ({ 
   author,
-  puzzleData,
   name,
+  puzzleData,
+  puzzleGridString,
   setAuthor,
   setName,
 }) {
-  const { colors, puzzle } = puzzleData;
+  const { 
+    colors,
+    // grid, 
+    puzzle,
+  } = puzzleData;
 
   return (
     <div className="puzzle-data">
@@ -96,8 +107,12 @@ function PuzzleData ({
         colors={colors}
       />
 
-      <PuzzleArrayDisplay
+      <ColorArrayDisplay
         puzzle={puzzle}
+      />
+
+      <PuzzleGridDisplay
+        grid={puzzleGridString}
       />
     </div>
   );
@@ -131,10 +146,11 @@ function ColorPalette ({
   );
 }
 
-function PuzzleArrayDisplay ({
+function ColorArrayDisplay ({
   puzzle,
 }) {
-  const parsePuzzleArray = () => {
+  // TODO: Did I plan on expanding this in the future? 
+  const parseColorArray = () => {
     return (
       <>
         {puzzle}
@@ -143,12 +159,34 @@ function PuzzleArrayDisplay ({
   };
 
   return (
-    <div className="puzzle-array-display">
+    <div className="color-array-display">
+      <h2>Color Array</h2>
       {
-        puzzle && parsePuzzleArray()
+        puzzle && parseColorArray()
       }
     </div>
   );
+}
+
+function PuzzleGridDisplay ({
+  grid,
+}) {
+  // const [, updateState ] = useState();
+
+  // // force redraw on grid change
+  // useEffect(() => {
+  //   console.log("Forcing Redraw?");
+  //   updateState({});
+  // }, [grid]);
+
+  return (
+    <div className="puzzle-grid-display">
+      <h2>Puzzle Grid</h2>
+      {
+        grid
+      }
+    </div>
+  )
 }
  
 export default ImageMetadata;

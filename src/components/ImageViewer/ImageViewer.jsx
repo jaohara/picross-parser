@@ -14,6 +14,7 @@ import {
 import "./ImageViewer.scss";
 
 import Board from '../Board/Board';
+import Button from '../Button/Button';
 import Pane from '../Pane/Pane';
 
 // set to adjust the max dimensions for a picross image
@@ -27,13 +28,18 @@ const ImageViewer = ({
   hasImage,
   imageError,
   puzzleData,
+  puzzleGrid,
   resetImage,
   resetImageError,
   setImageError,
   setPuzzleData,
+  togglePuzzleGridSquare,
   updateCurrentImageUrl,
   windowWidth,
 }) => {
+  // defaults to off, or color view
+  const [ gridViewActive, setGridViewActive ] = useState(false);
+
   // the canvas ref for the parseCanvas
   const parseCanvasRef = useRef(null);
 
@@ -131,6 +137,12 @@ const ImageViewer = ({
       const puzzleSize = image.height * image.width;
       const grid = new Array(puzzleSize).fill(0);
 
+
+
+
+      // ==============================================================
+      // TODO: Maybe not the best place for this to live - this is the type definiton
+      //  for what puzzleData is.
       const puzzle = {
         author: "Puzzle creator",
         colors: parsedColors,
@@ -140,7 +152,11 @@ const ImageViewer = ({
         puzzle: puzzleString,
         width: image.width,
       };
+      // ==============================================================
 
+
+
+      
       resetImageError();
       updateCurrentImageUrl(imageUrl);
       setPuzzleData(puzzle);
@@ -194,27 +210,30 @@ const ImageViewer = ({
           disabled={hasImage}
         />
 
+        {/* Prompt for dropzone */}
         <DropMessage 
           hasImage={hasImage}
           isDragActive={isDragActive} 
         />
 
-      {
-        imageError && (
-          <ImageErrorMessage message={imageError} />
-        )
-      }
+        {/* Render any imageErrors  */}
+        {
+          imageError && (
+            <ImageErrorMessage message={imageError} />
+          )
+        }
 
-        {/* I might not need this component going forward */}
-        {/* <LoadedImage
-          imageUrl={currentImageUrl}
-        /> */}
-
+        {/* Render board */}
         {
           hasImage && (
-            <Board 
-              puzzleData={puzzleData}
-            />
+            <>
+              <Board 
+                gridViewActive={gridViewActive}
+                puzzleData={puzzleData}
+                puzzleGrid={puzzleGrid}
+                togglePuzzleGridSquare={togglePuzzleGridSquare}
+              />
+            </>
           )
         }
 
@@ -227,8 +246,34 @@ const ImageViewer = ({
           width={20}
         />
       </div>
+
+      {/* Render controls */}
+      {
+        hasImage && (
+          <ImageViewerControls
+            gridViewActive={gridViewActive}
+            toggleColorOrGridView={() => setGridViewActive(!gridViewActive)}
+          />
+        )
+      }
     </Pane>
   );
+}
+
+function ImageViewerControls ({
+  gridViewActive,
+  toggleColorOrGridView = () => console.log("toggleColorOrGridView fired"),
+}) {
+  return (
+    <div className="image-viewer-controls">
+      <Button 
+        type={gridViewActive ? "puzzle-off" : "puzzle-on"}
+        onClick={toggleColorOrGridView}
+      >
+        Toggle { gridViewActive ? "Color" : "Puzzle"}{" "}View
+      </Button>
+    </div>
+  )
 }
 
 function ImageErrorMessage ({ message }) {
@@ -273,96 +318,5 @@ function DropMessage({
   );
 }
 
-function LoadedImage ({ imageUrl }) {
-  const DEFAULT_CANVAS_SIZE = 400;
-  const FILL_BACKGROUND_ON_IMAGE_LOAD = true;
-  const LOADED_IMAGE_BG_COLOR = "#ff0000";
-  
-  // state to store the size of an edge of the canvas (currently a square
-  const [ canvasSize , setCanvasSize ] = useState({
-    h: DEFAULT_CANVAS_SIZE,
-    w: DEFAULT_CANVAS_SIZE,
-  });
-
-  // a ref to store the generated <canvas> element
-  const canvasRef = useRef(null);
-
-  const fillCanvasBackground = (canvas) => {
-    const ctx = canvas.getContext('2d');
-    const previousFillStyle = ctx.fillStyle;
-    ctx.fillStyle = LOADED_IMAGE_BG_COLOR;
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.fillStyle = previousFillStyle;
-  }
-
-  const drawImage = () => {
-    const displayCanvas = canvasRef.current;
-    const displayCtx = displayCanvas.getContext('2d');
-    const img = new Image();
-    // const imgCanvas = new Canvas();
-
-    img.src = imageUrl;
-
-    img.onload = () => {
-      // put image on the imgCanvas to extract colors
-      // imgCanvas.height = img.height;
-      // imgCanvas.width = img.width;
-      // imgCanvas.drawImage(img, 0, 0);
-
-      // clear the canvas
-      displayCtx.clearRect(0, 0, displayCanvas.width, displayCanvas.height);
-
-      if (FILL_BACKGROUND_ON_IMAGE_LOAD) {
-        fillCanvasBackground(displayCanvas);
-      }
-
-      // TODO: here's where things get complicated
-      /*
-        Instead of just drawing the image, what we want to do is this:
-
-          - check the current size of the canvas
-          - check the size of the image
-          - determine what one pixel in the image maps to on the canvas
-          - render that scaled up image, with 
-      */
-
-      // draw the image
-      displayCtx.drawImage(img, 0, 0);
-    };
-  }
-
-  // an effect to fire when the imageUrl changes
-  useEffect(() => {
-    if (imageUrl) {
-      drawImage();
-    }
-    else {
-      const canvas = canvasRef.current;
-      
-      if (canvas) {
-        const ctx = canvas.getContext('2d');
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-      }
-    }
-  }, [imageUrl]);
-
-  const getClassNamesString = () => 
-    `loaded-image ${imageUrl && imageUrl.length > 0  ? "has-image" : ""}`;
-
-  return (
-    <>
-      { 
-        imageUrl && (
-          <canvas 
-            ref={canvasRef}
-            //hardcoded for now
-            height={canvasSize.h}
-            width={canvasSize.w}
-          />
-        )
-      }
-    </>
-  )
-}
  
 export default ImageViewer;
