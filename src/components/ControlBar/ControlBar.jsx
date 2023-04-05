@@ -3,6 +3,8 @@ import React from 'react';
 import gridIcon from "../../../public/grid-2.svg";
 import "./ControlBar.scss";
 
+import { useNavigate } from 'react-router-dom';
+
 import Button from '../Button/Button';
 
 const ControlBar = ({
@@ -37,15 +39,36 @@ function Controls ({
   // TODO: Remove placeholder later
   saveImage = () => { console.log("saveImage clicked!") },
 }) {
+  const navigate = useNavigate();
+
+  const USER_IS_LOGGED_IN_PLACEHOLDER = false;
+
+  // const navigateToLogin = () => console.log("navigateToLogin cliked!");
+  const navigateToLogin = () => navigate("login");
+
   return (
     <div className="controls-wrapper">
+
+      {
+        !USER_IS_LOGGED_IN_PLACEHOLDER && (
+          <Button 
+            onClick={navigateToLogin}
+            type="login"
+          >
+            Login
+          </Button>
+
+        )
+      }
+
       <Button
         disabled={!hasImage}
         onClick={saveImage}
         type="save"
-        >
-        Save Image 
+      >
+        Save Puzzle 
       </Button>
+
       <Button
         disabled={!hasImage}
         onClick={resetImage}

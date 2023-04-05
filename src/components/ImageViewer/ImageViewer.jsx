@@ -81,13 +81,15 @@ const ImageViewer = ({
       // should I count the indexes as well?
       let pixelCount = 0;
 
+      // =================================================================
+      // iterate through every pixel to record colors
+      // =================================================================
 
       const parseColorItem = (item) => {
         let result = item.toString(16);
         return result.length === 1 ? `0${result}` : result;
       }
 
-      // iterate through every pixel
       for (let y = 0; y < image.height; y++) {
         for (let x = 0; x < image.width; x++) {
           // data is pixel color as array in [r, g, b, a] format
@@ -124,9 +126,15 @@ const ImageViewer = ({
 
       const puzzleString = puzzleData.join();
 
+
+      // Create the array for the puzzle grid 
+      const puzzleSize = image.height * image.width;
+      const grid = new Array(puzzleSize).fill(0);
+
       const puzzle = {
         author: "Puzzle creator",
         colors: parsedColors,
+        grid: grid,
         height: image.height,
         name: "New Puzzle",
         puzzle: puzzleString,
