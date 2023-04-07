@@ -25,3 +25,6 @@ dist-ssr
 
 # config stuff
 .env
+
+# random directory for testing things
+sandbox

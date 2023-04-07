@@ -1,0 +1,50 @@
+@use "../../styles/globals.scss" as g;
+
+.diagnostic-window {
+  background-color: transparent;
+  bottom: 1rem;
+  display: flex;
+  height: 80vh;
+  position: absolute;
+  right: 0;
+  transform: translateX(28rem);
+  transition: transform g.$ui-fast-transition;
+  width: 32rem;
+  z-index: 5;
+  
+  &.active {
+    transform: translateX(0px);
+  }
+}
+
+.diagnostic-window-button-wrapper {
+  align-self: flex-end;
+  height: fit-content;
+  margin-right: 1rem;
+}
+
+.diagnostic-window-button {
+  align-items: center;
+  border-radius: 3rem;
+  background-color: g.$diagnostic-window-background-color;
+  color: g.$diagnostic-window-font-color;
+  display: flex;
+  height: 3rem;
+  justify-content: center;
+  width: 3rem;
+
+  &:hover {
+    background-color: g.$diagnostic-window-button-hover-color;
+  }
+}
+
+div.diagnostic-window-content {
+  background-color: g.$diagnostic-window-background-color;
+  border-top-left-radius: g.$common-border-radius;
+  border-bottom-left-radius: g.$common-border-radius;
+  color: g.$diagnostic-window-font-color;
+  // TODO: Still not working...
+  font-family: g.$mono-font !important; 
+  padding: g.$common-padding;
+  width: 100%;
+}

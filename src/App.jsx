@@ -10,7 +10,10 @@ import "./styles/App.scss";
 import ControlBar from "./components/ControlBar/ControlBar";
 import ImageMetadata from "./components/ImageMetadata/ImageMetadata";
 import ImageViewer from "./components/ImageViewer/ImageViewer";
-import { devConfig, prodConfig, appEnvironment } from './firebase';
+
+// TODO: Remove - only used for useEffect to confirm configs loaded from env vars
+import { devConfig, prodConfig, appEnvironment } from './firebase/firebaseConfig';
+import DiagnosticWindow from './components/DiagnosticWindow/DiagnosticWindow';
 
 // This is magic - see "On Memoized Components" note in obsidian vault
 const MemoizedImageViewer = memo(ImageViewer);
@@ -22,6 +25,7 @@ function App() {
   // maybe make this handled by a hook?
   const [ author, setAuthor ] = useState(DEFAULT_AUTHOR);
   const [ currentImageUrl, setCurrentImageUrl ] = useState("");
+  const [ diagnosticWindowActive, setDiagnosticWindowActive ] = useState(false);
   const [ imageError, setImageError ] = useState(null);
   const [ name, setName ] = useState(DEFAULT_NAME);
   const [ puzzleData, setPuzzleData ] = useState(null);
@@ -136,6 +140,11 @@ function App() {
           puzzleGridString={puzzleGridString}
           setAuthor={setAuthor}
           setName={setName}
+        />
+
+        <DiagnosticWindow
+          diagnosticWindowActive={diagnosticWindowActive}
+          setDiagnosticWindowActive={setDiagnosticWindowActive}
         />
       </div>
     </div>

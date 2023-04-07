@@ -183,7 +183,14 @@ function Square ({
   squareData,
   togglePuzzleGridSquare,
 }) {
-  const { color, colorIndex, pixelCount } = parseSquareData(squareData);
+  const { color, colorIndex, pixelCount } = (() => {
+    console.log(`parsingSquareData for ${squareData}...`);
+    const timeStarted = Date.now();
+    const result = parseSquareData(squareData);
+    const timeElapsed = Date.now() - timeStarted;
+    console.log(`parsedSquareData in ${timeElapsed}`);
+    return result;
+  })();
 
   const borderColor = "#35363866";
   const containerPadding = 4;

@@ -7,18 +7,23 @@ import {
   TbPuzzle,
   TbPuzzleOff,
   TbReload,
+  TbStethoscope,
+  TbStethoscopeOff,
 } from "react-icons/tb";
 
 import './Button.scss';
 
 const Button = ({
   children,
+  className,
   disabled,
   onClick,
   type = "none",
 }) => {
   const buttonIcons = {
     "clear": (<TbReload />),
+    "diagnostic-on": (<TbStethoscope />), 
+    "diagnostic-off": (<TbStethoscopeOff />), 
     "login": (<TbLogin />),
     // "save": (<TbFileCode />),
     "save": (<TbFileDownload />),
@@ -34,7 +39,11 @@ const Button = ({
     }
 
     return (
-      <div className="button-icon-wrapper">
+      <div 
+        className={`
+          button-icon-wrapper
+          ${!children ? "no-margin" : ""}
+      `}>
         {buttonIcons[type]}
       </div>
     );
@@ -43,7 +52,7 @@ const Button = ({
   return (
     <button 
       disabled={disabled}
-      className="app-button"
+      className={`${className} app-button`}
       onClick={onClick}
     >
       {getButtonIcon()}

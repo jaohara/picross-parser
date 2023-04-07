@@ -1,8 +1,6 @@
 // import dotenv from 'dotenv';
 // dotenv.config();
-// import firebase from 'firebase/app';
-// import 'firebase/auth';
-// import 'firebase/firestore';
+
 
 
 // const devConfig = {
@@ -27,5 +25,5 @@ export const prodConfig = {
   storageBucket: import.meta.env.VITE_PROD_STORAGE_BUCKET,
 };
 
-// this is the switch that allows us to 
+// const appEnvironment = import.meta.env.VITE_APP_ENVIRONMENT;
 export const appEnvironment = import.meta.env.VITE_APP_ENVIRONMENT;
