@@ -2,13 +2,15 @@ import React from 'react';
 
 import { 
   TbFileCode, // maybe for save?
-  TbFileDownload, // maybe for save?\
+  TbFileDownload, // maybe for save?
   TbLogin,
   TbPuzzle,
   TbPuzzleOff,
   TbReload,
   TbStethoscope,
   TbStethoscopeOff,
+  TbUserCircle,
+  TbUserPlus,
 } from "react-icons/tb";
 
 import './Button.scss';
@@ -24,9 +26,11 @@ const Button = ({
     "clear": (<TbReload />),
     "diagnostic-on": (<TbStethoscope />), 
     "diagnostic-off": (<TbStethoscopeOff />), 
+    "log-auth": (<TbUserCircle />),
     "login": (<TbLogin />),
     // "save": (<TbFileCode />),
     "save": (<TbFileDownload />),
+    "signup": (<TbUserPlus />),
     "puzzle-off": (<TbPuzzleOff />),
     "puzzle-on": (<TbPuzzle />),
   };

@@ -13,15 +13,34 @@
   padding: .6rem 1rem;
   transition: 
     background-color g.$ui-fast-transition, 
+    border-color g.$ui-fast-transition, 
     opacity g.$ui-fast-transition;
 
   &:hover:not(:disabled) {
     background-color: g.$button-hover-background-color;
+    border-color: g.$button-border-hover-color;
     cursor: pointer;
   }
 
   &:disabled {
     opacity: .5;
+  }
+
+  &.diagnostic-button {
+    color: g.$diagnostic-window-font-color;
+    width: 100%;
+
+    &:hover {
+      color: g.$diagnostic-button-font-hover-color;
+    }
+  }
+
+  &.diagnostic-window-button {
+    &:hover { 
+      // background-color: g.$diagnostic-window-button-hover-color;
+      color: g.$diagnostic-window-button-hover-color;
+      border-color: g.$diagnostic-window-button-hover-color;
+    }
   }
 }
 

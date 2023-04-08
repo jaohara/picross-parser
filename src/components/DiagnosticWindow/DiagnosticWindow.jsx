@@ -6,6 +6,7 @@ import Button from "../Button/Button";
 
 const DiagnosticWindow = ({ 
   diagnosticWindowActive,
+  logAuth = () => { console.log("logAuth called")},
   setDiagnosticWindowActive 
 }) => {
   const getClassNames = () => `
@@ -23,7 +24,15 @@ const DiagnosticWindow = ({
       </div>
 
       <div className="diagnostic-window-content">
-        <p>Hey, I&apos;m the diagnostic window!</p>
+        <div className="diagnostic-controls-wrapper">
+          <Button 
+            className="diagnostic-button"
+            onClick={logAuth}
+            type='log-auth'
+          >
+            Log Auth Object
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -4,12 +4,13 @@
   background-color: transparent;
   bottom: 1rem;
   display: flex;
-  height: 80vh;
+  max-height: 80vh;
+  overflow-y: scroll;
   position: absolute;
   right: 0;
-  transform: translateX(28rem);
+  transform: translateX(16rem);
   transition: transform g.$ui-fast-transition;
-  width: 32rem;
+  width: 20rem;
   z-index: 5;
   
   &.active {
@@ -26,6 +27,7 @@
 .diagnostic-window-button {
   align-items: center;
   border-radius: 3rem;
+  border-color: g.$diagnostic-window-font-color;
   background-color: g.$diagnostic-window-background-color;
   color: g.$diagnostic-window-font-color;
   display: flex;

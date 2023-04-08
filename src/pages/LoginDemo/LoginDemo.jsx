@@ -1,8 +1,8 @@
 import React from 'react';
 
-import "./Login.scss";
+import "./LoginDemo.scss";
 
-const Login = () => {
+const LoginDemo = () => {
   return (
     <div className="login-page">
       <p>Hey, I&apos;m the login page!</p>
@@ -10,4 +10,4 @@ const Login = () => {
   );
 };
  
-export default Login;
+export default LoginDemo;

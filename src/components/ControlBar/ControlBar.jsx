@@ -10,6 +10,7 @@ import Button from '../Button/Button';
 const ControlBar = ({
   hasImage,
   resetImage,
+  toggleLoginWindow,
 }) => {
   return ( 
     <div className="control-bar">
@@ -19,6 +20,7 @@ const ControlBar = ({
       <Controls
         hasImage={hasImage} 
         resetImage={resetImage}
+        toggleLoginWindow={toggleLoginWindow}
       />
     </div>
   );
@@ -38,6 +40,7 @@ function Controls ({
   resetImage,
   // TODO: Remove placeholder later
   saveImage = () => { console.log("saveImage clicked!") },
+  toggleLoginWindow = () => { console.log("toggleLoginWindow clicked!") },
 }) {
   const navigate = useNavigate();
 
@@ -52,7 +55,8 @@ function Controls ({
       {
         !USER_IS_LOGGED_IN_PLACEHOLDER && (
           <Button 
-            onClick={navigateToLogin}
+            // onClick={navigateToLogin}
+            onClick={toggleLoginWindow}
             type="login"
           >
             Login

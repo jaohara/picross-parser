@@ -9,6 +9,11 @@
   font-family: g.$body-font, sans-serif;
 }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   margin: 0rem;
 }
@@ -26,6 +31,7 @@ p {
 .app-body {
   display: flex;
   justify-content: space-between;
+  overflow-x: hidden;
   padding: g.$app-body-padding;
 
   .pane {

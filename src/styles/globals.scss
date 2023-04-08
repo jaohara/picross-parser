@@ -38,17 +38,23 @@ $border-highlight-color: $light-gray-300;
 // $button-background-color: $light-gray-200;
 $button-background-color: transparent;
 $button-border-color: $light-gray-200;
-$button-hover-background-color: $light-gray-200;
+$button-border-hover-color: $dark-gray-200;
+$button-hover-background-color: transparent;
+// $button-hover-background-color: $light-gray-200;
+$diagnostic-button-font-hover-color: $dark-gray-300;
 $diagnostic-window-background-color: $dark-gray-300;
-$diagnostic-window-button-hover-color: $dark-gray-100;
+$diagnostic-window-button-hover-color: $dark-gray-200;
 $diagnostic-window-font-color: $light-gray-100;
 $error-message-background-color: $red-100;
 $error-message-border-color: $red-200;
 $error-message-font-color: $error-message-border-color;
+$login-container-background-color: $dark-gray-300;
 $pane-background-color: $light-gray-100;
 $control-bar-background-color: $pane-background-color;
 $square-border-color: $square-gray;
 $square-hover-color: $red-100;
+$text-input-active-border-color: $dark-gray-200;
+$text-input-error-border-color: $red-100;
 
 // $a: #65ff0ff
 // #71821ff
@@ -61,4 +67,51 @@ $square-hover-color: $red-100;
   margin-top: 0rem;
   padding-bottom: .5rem;
   border-bottom: 2px solid $button-border-color;
+}
+
+// set responsive widths
+
+// responsive breakpoints
+$xs-breakpoint: 375px;
+$s-breakpoint: 768px;
+$m-breakpoint: 1280px;
+$l-breakpoint: 1920px;
+
+// mixins
+@mixin set-responsive-widths($xs-width, $s-width, $m-width, $l-width) {
+  //375px
+  width: $xs-width;
+
+  //768px
+  @media (min-width: $s-breakpoint) {
+    // margin: 0 auto;
+    width: $s-width;
+  }
+  //1280px
+  @media (min-width: $m-breakpoint) {
+    width: $m-width;
+  }
+  //1920px
+  @media (min-width: $l-breakpoint) {
+    width: $l-width;
+  }
+}
+
+@mixin standard-responsive-widths {
+  //375px
+  width: 100%;
+
+  //768px
+  @media (min-width: $s-breakpoint) {
+    // margin: 0 auto;
+    width: 768px;
+  }
+  //1280px
+  @media (min-width: $m-breakpoint) {
+    width: 1024px;
+  }
+  //1920px
+  @media (min-width: $l-breakpoint) {
+    width: 1440px;
+  }
 }

@@ -6,9 +6,11 @@ import {
 import { auth } from "./firebase";
 
 export function signUp(email, password, displayName) {
-  return `signUp called with email: ${email}, password: ${password}, displayName: ${displayName}`;
+  console.log(`signUp called with email: ${email}, password: ${password}, displayName: ${displayName}`);
+  return;
 }
 
 export function signIn(email, password) {
-  return `signIn called with email: ${email}, password: ${password}`;
+  console.log(`signIn called with email: ${email}, password: ${password}`);
+  return ;
 }

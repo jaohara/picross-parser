@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 import App from './App';
-import Login from './pages/Login/Login';
+import LoginDemo from './pages/LoginDemo/LoginDemo';
 
 const BASE_URL = "/picross-parser";
 
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
   // login route
   {
     path: `${BASE_URL}/login`,
-    element: <Login />,
+    element: <LoginDemo />,
   },
   // main route
   {

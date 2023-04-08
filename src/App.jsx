@@ -10,9 +10,16 @@ import "./styles/App.scss";
 import ControlBar from "./components/ControlBar/ControlBar";
 import ImageMetadata from "./components/ImageMetadata/ImageMetadata";
 import ImageViewer from "./components/ImageViewer/ImageViewer";
+import LoginWindow from './components/LoginWindow/LoginWindow';
+
+import {
+  auth,
+} from "./firebase/firebase";
 
 // TODO: Remove - only used for useEffect to confirm configs loaded from env vars
 import { devConfig, prodConfig, appEnvironment } from './firebase/firebaseConfig';
+
+
 import DiagnosticWindow from './components/DiagnosticWindow/DiagnosticWindow';
 
 // This is magic - see "On Memoized Components" note in obsidian vault
@@ -27,6 +34,7 @@ function App() {
   const [ currentImageUrl, setCurrentImageUrl ] = useState("");
   const [ diagnosticWindowActive, setDiagnosticWindowActive ] = useState(false);
   const [ imageError, setImageError ] = useState(null);
+  const [ loginWindowActive, setLoginWindowActive ] = useState(false);
   const [ name, setName ] = useState(DEFAULT_NAME);
   const [ puzzleData, setPuzzleData ] = useState(null);
   // TODO: Not sure if I like this name - this is the B&W grid for the puzzle
@@ -63,6 +71,8 @@ function App() {
   };
 
   const resetImageError = useCallback(() => setImageError(null), [setImageError]);
+  
+  const toggleLoginWindow = () => setLoginWindowActive(!loginWindowActive);
 
   // is this necessary? Maybe not
   const updateCurrentImageUrl = useCallback((url) => setCurrentImageUrl(url), [setCurrentImageUrl]);
@@ -114,6 +124,12 @@ function App() {
       <ControlBar 
         hasImage={hasImage}
         resetImage={resetImage}
+        toggleLoginWindow={toggleLoginWindow}
+      />
+
+      <LoginWindow
+        setWindowActive={setLoginWindowActive}
+        windowActive={loginWindowActive}
       />
 
       <div className="app-body">
@@ -144,11 +160,18 @@ function App() {
 
         <DiagnosticWindow
           diagnosticWindowActive={diagnosticWindowActive}
+          logAuth={logAuth}
           setDiagnosticWindowActive={setDiagnosticWindowActive}
         />
+
+        
       </div>
     </div>
   )
 }
+
+
+// Log functions to be passed to DiagnosticWindow
+const logAuth = () => console.log("firebase.Auth: ", auth);
 
 export default App
