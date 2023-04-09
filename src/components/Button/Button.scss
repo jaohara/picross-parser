@@ -31,7 +31,13 @@
     width: 100%;
 
     &:hover {
+      background-color: g.$diagnostic-button-background-hover-color;
+      border-color: g.$diagnostic-button-border-hover-color;
       color: g.$diagnostic-button-font-hover-color;
+    }
+
+    &:not(:first-child) {
+      margin-top: .5rem;
     }
   }
 

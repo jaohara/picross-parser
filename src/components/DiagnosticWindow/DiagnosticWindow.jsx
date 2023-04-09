@@ -1,14 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import "./DiagnosticWindow.scss";
 
 import Button from "../Button/Button";
+import { AuthContext } from '../../contexts/AuthContext';
 
 const DiagnosticWindow = ({ 
   diagnosticWindowActive,
   logAuth = () => { console.log("logAuth called")},
   setDiagnosticWindowActive 
 }) => {
+  const { logUser } = useContext(AuthContext);
+
   const getClassNames = () => `
     diagnostic-window
     ${diagnosticWindowActive ? "active" : ""}
@@ -31,6 +34,13 @@ const DiagnosticWindow = ({
             type='log-auth'
           >
             Log Auth Object
+          </Button>
+          <Button 
+            className="diagnostic-button"
+            onClick={logUser}
+            type='log-auth'
+          >
+            Log User
           </Button>
         </div>
       </div>

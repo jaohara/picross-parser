@@ -39,6 +39,12 @@ $background-opacity: .6;
   padding: 4rem 0;
   
   @include g.set-responsive-widths(100%, $login-window-width, $login-window-width, $login-window-width);
+
+  h1 {
+    font-size: 2.4rem;
+    margin-bottom: 4rem;
+    margin-top: 0rem;
+  }
 }
 
 .login-form { 

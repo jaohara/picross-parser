@@ -6,6 +6,8 @@ import {
   RouterProvider
 } from "react-router-dom";
 
+import { AuthContextProvider } from './contexts/AuthContext';
+
 import App from './App';
 import LoginDemo from './pages/LoginDemo/LoginDemo';
 
@@ -22,7 +24,9 @@ const router = createBrowserRouter([
     path: BASE_URL,
     element: (
       <React.StrictMode>
-        <App />
+        <AuthContextProvider>
+          <App />
+        </AuthContextProvider>
       </React.StrictMode>
     ),
     // loader: someFutureRootLoader,

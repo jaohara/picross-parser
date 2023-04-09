@@ -1,39 +1,38 @@
 import React, { 
-  useState 
+  useContext,
+  useState,
 } from 'react';
 
 import "./LoginWindow.scss";
 
-import { auth } from "../../firebase/firebase";
+// import { auth } from "../../firebase/firebase";
 
-import { 
-  signIn,
-  signUp,
-} from "../../firebase/auth";
+// import { 
+//   signIn,
+//   signUp,
+// } from "../../firebase/auth";
+
+import { AuthContext } from '../../contexts/AuthContext';
 
 import Button from '../Button/Button';
 import TextInput from '../TextInput/TextInput';
 
 const LoginWindow = ({
-  windowActive,
-  setWindowActive,
+  windowMode,
+  setWindowMode,
 }) => {
-  const [ showSignup, setShowSignup ] = useState(false);
-
   const getContainerClassNames = () => `
     login-window-container
-    ${windowActive ? "active" : ""}
+    ${windowMode !== "disabled" ? "active" : ""}
   `;
 
   const closeWindow = (event) => {
-    if (event.target.closest(".login-window-wrapper")) {
+    if (event && event.target.closest(".login-window-wrapper")) {
       return;
     }
 
-    setWindowActive(false);
+    setWindowMode("disabled");
   };
-
-  const handleToggleForm = () => setShowSignup(!showSignup);
 
   return ( 
     <div 
@@ -41,38 +40,42 @@ const LoginWindow = ({
       // TODO: Temporary way to close window - exclude .login-window-wrapper from this
       onClick={closeWindow}
     >
-      <div className="login-window-wrapper"
-        // onClick={e => e.preventDefault()}
-      >
-        <Button
-          onClick={handleToggleForm}
-          type={showSignup ? "login" : "signup"}
-        >
-          Toggle { showSignup ? "Login" : "Signup"}
-        </Button>
-
+      <div className="login-window-wrapper">
         {
-          showSignup ? (
-            <SignUpForm />
-          ) :
-          (
-            <LoginForm />
+          windowMode === "signup" && (
+            <SignUpForm 
+              closeWindow={closeWindow}
+            />
           )
         }
 
+        {
+          windowMode === "login" && (
+            <LoginForm 
+              closeWindow={closeWindow} 
+            />
+          )
+        }
       </div>
     </div>
   );
 }
 
-function LoginForm () {
+function LoginForm ({ closeWindow }) {
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
 
+  const { login } = useContext(AuthContext);
+
+  const canSubmit = email.length > 0 && password.length > 0;
+
   const handleSubmit = () => {
     console.log("Firing LoginForm handleSubmit");
-    // TODO: Implement
-    signIn(email, password);
+    login(email, password);
+
+    // TODO: Only close on success
+    // assuming success here
+    closeWindow();
   };
   
   return (
@@ -94,6 +97,7 @@ function LoginForm () {
 
       <Button
         className="login-button"
+        disabled={!canSubmit}
         onClick={handleSubmit}
         type="login"
       >
@@ -103,21 +107,29 @@ function LoginForm () {
   ); 
 }
 
-function SignUpForm () {
+function SignUpForm ({ closeWindow }) {
   const [ confirmPassword, setConfirmPassword ] = useState("");
   const [ email, setEmail ] = useState("");
   const [ password, setPassword ] = useState("");
   const [ username, setUsername ] = useState("");
+
+  const { register } = useContext(AuthContext);
   
   const passwordsMatch = password === confirmPassword;
   
   const passwordError = 
-  password.length !== 0 && confirmPassword.length !== 0 && !passwordsMatch;
+    password.length !== 0 && confirmPassword.length !== 0 && !passwordsMatch;
   
+  const canSubmit = email.length > 0 && username.length > 0 && password.length > 0 &&
+    confirmPassword.length > 0 && passwordsMatch; 
+
   const handleSubmit = () => {
     console.log("Firing SignupForm handleSubmit");
-    // TODO: Implement
-    signUp(email, password, username);
+    register(email, password, username);
+
+    // TODO: only close on register success
+    // also assuming success here
+    closeWindow();
   };
 
   return (
@@ -154,6 +166,7 @@ function SignUpForm () {
 
       <Button
         className="login-button"
+        disabled={!canSubmit}
         onClick={handleSubmit}
         type="signup"
       >

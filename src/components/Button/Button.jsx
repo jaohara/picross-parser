@@ -4,6 +4,7 @@ import {
   TbFileCode, // maybe for save?
   TbFileDownload, // maybe for save?
   TbLogin,
+  TbLogout,
   TbPuzzle,
   TbPuzzleOff,
   TbReload,
@@ -28,6 +29,7 @@ const Button = ({
     "diagnostic-off": (<TbStethoscopeOff />), 
     "log-auth": (<TbUserCircle />),
     "login": (<TbLogin />),
+    "logout": (<TbLogout />),
     // "save": (<TbFileCode />),
     "save": (<TbFileDownload />),
     "signup": (<TbUserPlus />),
