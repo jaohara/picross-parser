@@ -10,4 +10,8 @@ The idea is to use this React App to extract image data from a pixel image for u
 Deploying this Vite project to Github Pages was done with the help of [this guide.](https://github.com/sitek94/vite-deploy-demo)
 
 ## Screenshots
-![Screenshot 3-31-23](src/assets/screens/screenshot-3-31-23.png)
+![Screenshot 4-9-23](src/assets/screens/screenshot-4-9-23.png)
+Main UI 
+
+![Login Screen](src/assests/screens/screenshot-login-4-9-23.png)
+Login Dialog UI
