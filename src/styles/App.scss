@@ -4,11 +4,22 @@
 
 * {
   box-sizing: border-box;
+  // TODO: maybe not the best place for this? It's taking priority in certain spots
+  //  like div.diagnostic-window-content
   font-family: g.$body-font, sans-serif;
 }
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
-  margin: 0;
+  margin: 0rem;
+}
+
+p {
+  margin-top: 0rem;
 }
 
 .App {
@@ -20,6 +31,7 @@ body {
 .app-body {
   display: flex;
   justify-content: space-between;
+  overflow-x: hidden;
   padding: g.$app-body-padding;
 
   .pane {

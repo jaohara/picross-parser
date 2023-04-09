@@ -17,7 +17,16 @@
   border: 2px solid;
   border-color: g.$button-border-color;
   border-radius: g.$common-border-radius;
+  font-size: 1.2rem;
   outline: none;
   padding: .6rem;
-  font-size: 1.2rem;
+  transition: border-color g.$ui-fast-transition;
+
+  &:focus {
+    border-color: g.$text-input-active-border-color;
+  }
+
+  &.error {
+    border-color: g.$text-input-error-border-color;
+  }
 }

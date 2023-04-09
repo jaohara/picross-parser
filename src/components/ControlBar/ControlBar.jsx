@@ -1,15 +1,19 @@
-import React from 'react';
+import React, {
+  useContext,
+} from 'react';
 
 import gridIcon from "../../../public/grid-2.svg";
 import "./ControlBar.scss";
 
-import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '../../contexts/AuthContext';
 
 import Button from '../Button/Button';
 
 const ControlBar = ({
   hasImage,
   resetImage,
+  toggleLoginWindow,
+  toggleSignupWindow,
 }) => {
   return ( 
     <div className="control-bar">
@@ -19,6 +23,8 @@ const ControlBar = ({
       <Controls
         hasImage={hasImage} 
         resetImage={resetImage}
+        toggleLoginWindow={toggleLoginWindow}
+        toggleSignupWindow={toggleSignupWindow}
       />
     </div>
   );
@@ -38,36 +44,49 @@ function Controls ({
   resetImage,
   // TODO: Remove placeholder later
   saveImage = () => { console.log("saveImage clicked!") },
+  toggleLoginWindow = () => { console.log("toggleLoginWindow clicked!") },
+  toggleSignupWindow = () => { console.log("toggleSignupWindow clicked!")}, 
 }) {
-  const navigate = useNavigate();
 
-  const USER_IS_LOGGED_IN_PLACEHOLDER = false;
-
-  // const navigateToLogin = () => console.log("navigateToLogin cliked!");
-  const navigateToLogin = () => navigate("login");
+  const { logout, user } = useContext(AuthContext);
 
   return (
     <div className="controls-wrapper">
 
       {
-        !USER_IS_LOGGED_IN_PLACEHOLDER && (
-          <Button 
-            onClick={navigateToLogin}
-            type="login"
-          >
-            Login
-          </Button>
-
+        !user ? (
+          <>
+            <Button 
+              onClick={toggleLoginWindow}
+              type="login"
+              >
+              Login
+            </Button>
+            <Button 
+              onClick={toggleSignupWindow}
+              type="signup"
+            >
+              Register
+            </Button>
+          </>
+        ) : (
+          <>
+            <Button 
+              onClick={logout}
+              type='logout'
+            >
+              Logout
+            </Button>
+            <Button
+              disabled={!hasImage}
+              onClick={saveImage}
+              type="save"
+            >
+              Save Puzzle 
+            </Button>
+          </>
         )
       }
-
-      <Button
-        disabled={!hasImage}
-        onClick={saveImage}
-        type="save"
-      >
-        Save Puzzle 
-      </Button>
 
       <Button
         disabled={!hasImage}
@@ -76,7 +95,6 @@ function Controls ({
       >
         Clear Image
       </Button>
-
     </div>
   )
 }

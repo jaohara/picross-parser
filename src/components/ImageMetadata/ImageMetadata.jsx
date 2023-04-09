@@ -95,12 +95,12 @@ function PuzzleData ({
           value={name}
         />
         
-        <TextInput
+        {/* <TextInput
           key={"author-name-text-input"}
           label={"Made By"}
           setValue={setAuthor}
           value={author}
-        />
+        /> */}
       </div>
 
       <ColorPalette

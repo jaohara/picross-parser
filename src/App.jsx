@@ -2,15 +2,26 @@ import {
   memo,
   useEffect,
   useCallback,
-  useState, 
+  useState,
+  useContext, 
 } from 'react'
 
 import "./styles/App.scss";
 
 import ControlBar from "./components/ControlBar/ControlBar";
+import DiagnosticWindow from './components/DiagnosticWindow/DiagnosticWindow';
 import ImageMetadata from "./components/ImageMetadata/ImageMetadata";
 import ImageViewer from "./components/ImageViewer/ImageViewer";
-import { devConfig, prodConfig, appEnvironment } from './firebase';
+import LoginWindow from './components/LoginWindow/LoginWindow';
+
+import {
+  auth,
+} from "./firebase/firebase";
+
+// TODO: Remove - only used for useEffect to confirm configs loaded from env vars
+import { devConfig, prodConfig, appEnvironment } from './firebase/firebaseConfig';
+
+import { AuthContext } from './contexts/AuthContext';
 
 // This is magic - see "On Memoized Components" note in obsidian vault
 const MemoizedImageViewer = memo(ImageViewer);
@@ -19,10 +30,21 @@ const DEFAULT_AUTHOR = "Anonymous";
 const DEFAULT_NAME = "New puzzle"
 
 function App() {
+  const {
+    user
+  } = useContext(AuthContext);
+
+
   // maybe make this handled by a hook?
-  const [ author, setAuthor ] = useState(DEFAULT_AUTHOR);
+
+  // TODO: REMOVE THIS, insert user.displayName at save instead
+  const [ author, setAuthor ] = useState();
+
+
   const [ currentImageUrl, setCurrentImageUrl ] = useState("");
+  const [ diagnosticWindowActive, setDiagnosticWindowActive ] = useState(false);
   const [ imageError, setImageError ] = useState(null);
+  const [ loginWindowMode, setLoginWindowMode ] = useState("disabled");
   const [ name, setName ] = useState(DEFAULT_NAME);
   const [ puzzleData, setPuzzleData ] = useState(null);
   // TODO: Not sure if I like this name - this is the B&W grid for the puzzle
@@ -59,6 +81,12 @@ function App() {
   };
 
   const resetImageError = useCallback(() => setImageError(null), [setImageError]);
+  
+  const toggleLoginWindow = () => 
+    setLoginWindowMode(loginWindowMode === "disabled" ? "login" : "disabled");
+    
+  const toggleSignupWindow = () => 
+    setLoginWindowMode(loginWindowMode === "disabled" ? "signup" : "disabled");
 
   // is this necessary? Maybe not
   const updateCurrentImageUrl = useCallback((url) => setCurrentImageUrl(url), [setCurrentImageUrl]);
@@ -110,6 +138,13 @@ function App() {
       <ControlBar 
         hasImage={hasImage}
         resetImage={resetImage}
+        toggleLoginWindow={toggleLoginWindow}
+        toggleSignupWindow={toggleSignupWindow}
+      />
+
+      <LoginWindow
+        setWindowMode={setLoginWindowMode}
+        windowMode={loginWindowMode}
       />
 
       <div className="app-body">
@@ -137,9 +172,21 @@ function App() {
           setAuthor={setAuthor}
           setName={setName}
         />
+
+        <DiagnosticWindow
+          diagnosticWindowActive={diagnosticWindowActive}
+          logAuth={logAuth}
+          setDiagnosticWindowActive={setDiagnosticWindowActive}
+        />
+
+        
       </div>
     </div>
   )
 }
+
+
+// Log functions to be passed to DiagnosticWindow
+const logAuth = () => console.log("firebase.Auth: ", auth);
 
 export default App
