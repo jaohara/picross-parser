@@ -39,6 +39,7 @@ const ImageViewer = ({
 }) => {
   // defaults to off, or color view
   const [ gridViewActive, setGridViewActive ] = useState(false);
+  const [ puzzleGridOpacity, setPuzzleGridOpacity ] = useState(100);
 
   // the canvas ref for the parseCanvas
   const parseCanvasRef = useRef(null);
@@ -231,6 +232,7 @@ const ImageViewer = ({
                 gridViewActive={gridViewActive}
                 puzzleData={puzzleData}
                 puzzleGrid={puzzleGrid}
+                puzzleOpacity={puzzleGridOpacity}
                 togglePuzzleGridSquare={togglePuzzleGridSquare}
               />
             </>
@@ -252,7 +254,9 @@ const ImageViewer = ({
         hasImage && (
           <ImageViewerControls
             gridViewActive={gridViewActive}
+            puzzleGridOpacity={puzzleGridOpacity}
             toggleColorOrGridView={() => setGridViewActive(!gridViewActive)}
+            setPuzzleGridOpacity={setPuzzleGridOpacity}
           />
         )
       }
@@ -262,7 +266,9 @@ const ImageViewer = ({
 
 function ImageViewerControls ({
   gridViewActive,
+  puzzleGridOpacity,
   toggleColorOrGridView = () => console.log("toggleColorOrGridView fired"),
+  setPuzzleGridOpacity,
 }) {
   return (
     <div className="image-viewer-controls">
@@ -272,6 +278,19 @@ function ImageViewerControls ({
       >
         Toggle { gridViewActive ? "Color" : "Puzzle"}{" "}View
       </Button>
+
+      <div className="image-viewer-controls-opacity-slider-wrapper">
+        <label>Grid Opacity</label>
+        <input 
+          className="image-viewer-controls-opacity-slider"
+          max="1"
+          min="0" 
+          onChange={e => setPuzzleGridOpacity(e.target.value)}
+          step={.1}
+          type="range"
+          value={puzzleGridOpacity}
+        />
+      </div>
     </div>
   )
 }

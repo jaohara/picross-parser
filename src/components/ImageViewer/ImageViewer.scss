@@ -96,3 +96,24 @@
   left: -9999px;
   position: absolute;
 }
+
+.image-viewer-controls {
+  align-items: center;
+  display: flex;
+}
+
+.image-viewer-controls-opacity-slider-wrapper {
+  display: flex;
+  flex: 1;
+  margin-left: 1rem;
+
+  label {
+    font-weight: bold;
+    font-size: .8rem;
+    text-align: center;
+  }
+}
+
+.image-viewer-controls-opacity-slider {
+  width: 100%;
+}

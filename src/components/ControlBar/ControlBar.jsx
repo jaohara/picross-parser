@@ -59,7 +59,7 @@ function Controls ({
             <Button 
               onClick={toggleLoginWindow}
               type="login"
-              >
+            >
               Login
             </Button>
             <Button 

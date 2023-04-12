@@ -14,11 +14,6 @@ import {
 
 import { auth } from "../firebase/firebase";
 
-import { 
-  signIn,
-  signUp
-} from "../firebase/auth";
-
 const AuthContext = createContext(undefined);
 
 function AuthContextProvider(props) {
