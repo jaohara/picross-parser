@@ -51,6 +51,7 @@ const Board = ({
   gridViewActive,
   puzzleData = TEMP_PUZZLE_DATA,
   puzzleGrid,
+  puzzleOpacity,
   togglePuzzleGridSquare,
 }) => {
   const { colors } = puzzleData;
@@ -134,6 +135,7 @@ const Board = ({
             key={`row-${index}`}
             parseSquareData={parseSquareData}
             puzzleGrid={puzzleGrid}
+            puzzleOpacity={puzzleOpacity}
             rowData={rowData}
             togglePuzzleGridSquare={togglePuzzleGridSquare}
           />
@@ -149,6 +151,7 @@ function Row ({
   gridViewActive,
   parseSquareData,
   puzzleGrid,
+  puzzleOpacity,
   rowData,
   togglePuzzleGridSquare,
 }) {
@@ -165,6 +168,7 @@ function Row ({
             // isFilled={false}
             parseSquareData={parseSquareData}
             puzzleGrid={puzzleGrid}
+            puzzleOpacity={puzzleOpacity}
             squareData={squareData}
             togglePuzzleGridSquare={togglePuzzleGridSquare}
           />
@@ -180,6 +184,7 @@ function Square ({
   // isFilled,
   parseSquareData,
   puzzleGrid,
+  puzzleOpacity = .75,
   squareData,
   togglePuzzleGridSquare,
 }) {
@@ -214,11 +219,15 @@ function Square ({
     return isFilled ? fillColor : emptyColor;
   }
 
+  const getPuzzleSquareColor = () => isFilled ? fillColor : emptyColor;
+
+  const getPuzzleGridOpacity = () => gridViewActive ? puzzleOpacity : 0;
+
   return (
     <div 
       className="board-square"
       onClick={toggleSquare}
-      // onClick={() => console.log("Hello?")}
+      // onMouseLeave={}
     >
       {/* Just out put string for now */}
       {/* {squareData} */}
@@ -228,14 +237,29 @@ function Square ({
         width={squareSize + (2 * containerPadding)}
       >
         <rect
-          className="board-square-rect"
+          className="board-square-rect color-rect"
           height={squareSize}
           width={squareSize}
           rx={borderRadius}
           style={{
-            fill: getSquareColor(),
+            // fill: getSquareColor(),
+            fill: color,
             stroke: borderColor,
             strokeWidth: strokeWidth, 
+          }}
+          x={containerPadding}
+          y={containerPadding}
+        />
+        <rect
+          className="board-square-rect puzzle-rect"
+          height={squareSize}
+          width={squareSize}
+          rx={borderRadius}
+          style={{
+            fill: getPuzzleSquareColor(),
+            opacity: getPuzzleGridOpacity(),
+            // stroke: borderColor,
+            // strokeWidth: strokeWidth, 
           }}
           x={containerPadding}
           y={containerPadding}
