@@ -33,8 +33,11 @@ p {
   justify-content: space-between;
   overflow-x: hidden;
   padding: g.$app-body-padding;
+  width: 100vw;
 
   .pane {
+    // width: 100%;
+    // flex-grow: 1;
     width: 49vw;
   }
 }

@@ -103,6 +103,7 @@
 }
 
 .image-viewer-controls-opacity-slider-wrapper {
+  align-items: center;
   display: flex;
   flex: 1;
   margin-left: 1rem;
@@ -115,5 +116,29 @@
 }
 
 .image-viewer-controls-opacity-slider {
+  -webkit-appearance: none;
+  background-color: transparent;
+  background-color: g.$opacity-slider-background-color;
+  border: 2px solid g.$opacity-slider-background-color;
+  border-radius: 1rem;
+  outline: none;
+  height: .75rem;
   width: 100%;
+
+  &::-webkit-slider-thumb {
+    background-color: g.$opacity-slider-thumb-color;
+    border: 0px;
+    border-radius: 1rem;
+    cursor: pointer;
+    height: 1.5rem;
+    width: 1.5rem;
+  }
+  &::-moz-range-thumb {
+    background-color: g.$opacity-slider-thumb-color;
+    border: 0px;
+    border-radius: 1rem;
+    cursor: pointer;
+    height: 1.5rem;
+    width: 1.5rem;
+  }
 }
