@@ -223,15 +223,16 @@ function Square ({
 
   const getPuzzleGridOpacity = () => gridViewActive ? puzzleOpacity : 0;
 
+  const handleMouseOut = (event) => {
+    console.log(`handleMouseOut firing on Square ${pixelCount}`, event);
+  };
+
   return (
     <div 
       className="board-square"
       onClick={toggleSquare}
-      // onMouseLeave={}
+      onMouseLeave={handleMouseOut}
     >
-      {/* Just out put string for now */}
-      {/* {squareData} */}
-
       <svg
         height={squareSize + (2 * containerPadding)}
         width={squareSize + (2 * containerPadding)}
