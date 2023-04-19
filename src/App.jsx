@@ -6,6 +6,9 @@ import {
   useContext, 
 } from 'react'
 
+// import { Sha256 } from '@aws-crypto/sha256-js';
+import { createHash } from 'sha256-uint8array';
+
 import "./styles/App.scss";
 
 import ControlBar from "./components/ControlBar/ControlBar";
@@ -81,6 +84,36 @@ function App() {
   };
 
   const resetImageError = useCallback(() => setImageError(null), [setImageError]);
+
+  const savePuzzleDataToDatabase = () => {
+    if (!puzzleData) {
+      console.error("savePuzzleDataToDatabase: cannot save, puzzleData is null");
+      return;
+    }
+
+    const savePuzzle = async () => {
+      // const gridHash = new Sha256();
+      // gridHash.update(puzzleGrid);
+      // const gridHashDigest = await gridHash.digest();
+
+      const hashInput = `${puzzleData.name}${puzzleGrid}`;
+      console.log("hashInput: ", hashInput);
+      const gridHash = createHash().update(hashInput).digest("hex");
+      console.log("gridHash: ", gridHash);
+
+      const compiledPuzzleData = {
+        ...puzzleData,
+        author: user.displayName,
+        grid: puzzleGrid,
+        // gridHash: gridHash,
+      };
+
+  
+      console.log("savePuzzleDataToDataBase: current puzzleData:", compiledPuzzleData);
+    };
+
+    savePuzzle();
+  };
   
   const toggleLoginWindow = () => 
     setLoginWindowMode(loginWindowMode === "disabled" ? "login" : "disabled");
@@ -100,7 +133,9 @@ function App() {
     resetImageError();
   }, [setCurrentImageUrl]);
 
-  const hasImage = currentImageUrl && currentImageUrl.length > 0;
+  // TODO: Ensure that this is working properly now that we're not using currentImageUrl
+  // const hasImage = currentImageUrl && currentImageUrl.length > 0;
+  const hasImage = puzzleData !== null;
 
   useEffect(() => {
     // bind window size change event listener on first render
@@ -109,13 +144,6 @@ function App() {
     };
 
     window.addEventListener('resize', handleResize);
-
-
-    // TEST: output the config objects
-
-    console.log("appEnvironment: ", appEnvironment);
-    console.log("devConfig.projectId: ", devConfig.projectId);
-    console.log("prodConfig.projectId: ", prodConfig.projectId);
 
     // remove event listener when unmounted
     return () => {
@@ -126,9 +154,12 @@ function App() {
   useEffect(() => {
     if (!puzzleData) {
       setPuzzleGrid([]);
+      return;
     }
 
-    puzzleData?.grid && Array.isArray(puzzleData.grid) && setPuzzleGrid(puzzleData.grid);
+    const puzzleSize = puzzleData.height * puzzleData.width;
+    const grid = new Array(puzzleSize).fill(0);
+    setPuzzleGrid(grid);
   }, [puzzleData]);
 
   const puzzleGridString = puzzleGrid.join("");
@@ -138,6 +169,7 @@ function App() {
       <ControlBar 
         hasImage={hasImage}
         resetImage={resetImage}
+        savePuzzleDataToDatabase={savePuzzleDataToDatabase}
         toggleLoginWindow={toggleLoginWindow}
         toggleSignupWindow={toggleSignupWindow}
       />
@@ -189,4 +221,4 @@ function App() {
 // Log functions to be passed to DiagnosticWindow
 const logAuth = () => console.log("firebase.Auth: ", auth);
 
-export default App
+export default App;

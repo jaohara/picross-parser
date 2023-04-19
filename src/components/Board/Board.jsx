@@ -189,11 +189,11 @@ function Square ({
   togglePuzzleGridSquare,
 }) {
   const { color, colorIndex, pixelCount } = (() => {
-    console.log(`parsingSquareData for ${squareData}...`);
-    const timeStarted = Date.now();
+    // console.log(`parsingSquareData for ${squareData}...`);
+    // const timeStarted = Date.now();
     const result = parseSquareData(squareData);
-    const timeElapsed = Date.now() - timeStarted;
-    console.log(`parsedSquareData in ${timeElapsed}`);
+    // const timeElapsed = Date.now() - timeStarted;
+    // console.log(`parsedSquareData in ${timeElapsed}`);
     return result;
   })();
 
@@ -233,6 +233,9 @@ function Square ({
       onClick={toggleSquare}
       onMouseLeave={handleMouseOut}
     >
+      {/* Just out put string for now */}
+      {/* {squareData} */}
+
       <svg
         height={squareSize + (2 * containerPadding)}
         width={squareSize + (2 * containerPadding)}

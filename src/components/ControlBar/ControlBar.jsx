@@ -12,6 +12,7 @@ import Button from '../Button/Button';
 const ControlBar = ({
   hasImage,
   resetImage,
+  savePuzzleDataToDatabase,
   toggleLoginWindow,
   toggleSignupWindow,
 }) => {
@@ -23,6 +24,7 @@ const ControlBar = ({
       <Controls
         hasImage={hasImage} 
         resetImage={resetImage}
+        savePuzzleDataToDatabase={savePuzzleDataToDatabase}
         toggleLoginWindow={toggleLoginWindow}
         toggleSignupWindow={toggleSignupWindow}
       />
@@ -43,7 +45,8 @@ function Controls ({
   hasImage,
   resetImage,
   // TODO: Remove placeholder later
-  saveImage = () => { console.log("saveImage clicked!") },
+  // savePuzzleDataToDatabase = () => { console.log("saveImage clicked!") },
+  savePuzzleDataToDatabase,
   toggleLoginWindow = () => { console.log("toggleLoginWindow clicked!") },
   toggleSignupWindow = () => { console.log("toggleSignupWindow clicked!")}, 
 }) {
@@ -79,7 +82,7 @@ function Controls ({
             </Button>
             <Button
               disabled={!hasImage}
-              onClick={saveImage}
+              onClick={savePuzzleDataToDatabase}
               type="save"
             >
               Save Puzzle 

@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@aws-crypto/sha256-js": "^4.0.0",
     "dotenv": "^16.0.3",
     "firebase": "^9.19.1",
     "react": "^18.2.0",
@@ -16,7 +17,8 @@
     "react-dropzone": "^14.2.3",
     "react-icons": "^4.8.0",
     "react-router": "^6.10.0",
-    "react-router-dom": "^6.10.0"
+    "react-router-dom": "^6.10.0",
+    "sha256-uint8array": "^0.10.5"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

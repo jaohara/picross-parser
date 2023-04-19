@@ -135,8 +135,8 @@ const ImageViewer = ({
 
 
       // Create the array for the puzzle grid 
-      const puzzleSize = image.height * image.width;
-      const grid = new Array(puzzleSize).fill(0);
+      // const puzzleSize = image.height * image.width;
+      // const grid = new Array(puzzleSize).fill(0);
 
 
 
@@ -145,9 +145,9 @@ const ImageViewer = ({
       // TODO: Maybe not the best place for this to live - this is the type definiton
       //  for what puzzleData is.
       const puzzle = {
-        author: "Puzzle creator",
+        // author: "Puzzle creator",
         colors: parsedColors,
-        grid: grid,
+        // grid: grid,
         height: image.height,
         name: "New Puzzle",
         puzzle: puzzleString,
@@ -159,6 +159,7 @@ const ImageViewer = ({
 
       
       resetImageError();
+      // TODO: Am I still using this?
       updateCurrentImageUrl(imageUrl);
       setPuzzleData(puzzle);
     };
