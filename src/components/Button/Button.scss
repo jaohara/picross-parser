@@ -60,4 +60,14 @@
   &.no-margin {
     margin-right: 0rem;
   }
+
+  &.waiting {
+    animation: spin 1s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }

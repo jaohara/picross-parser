@@ -5,6 +5,7 @@ import "./TextInput.scss";
 const TextInput = ({
   error = false,
   label,
+  onChange,
   password = false,
   setValue = () => {},
   value = "",
@@ -14,6 +15,14 @@ const TextInput = ({
     ${error ? "error" : ""}
   `;
 
+  const handleInput = (e) => {
+    setValue(e.target.value);
+
+    if (onChange && typeof onChange === "function") {
+      onChange(e);
+    }
+  }
+
   return ( 
     <div className="text-input-wrapper">
       {
@@ -21,7 +30,8 @@ const TextInput = ({
       }
       <input 
         className={getClassNames()}
-        onChange={e => setValue(e.target.value)}
+        // onChange={e => setValue(e.target.value)}
+        onChange={e => handleInput(e)}
         type={password ? "password" : "text"}
         value={value}
       />

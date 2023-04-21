@@ -5,51 +5,9 @@ import "./Board.scss";
 const PUZZLE_FILL_CHAR = "*";
 const PUZZLE_SQUARE_DELIMITER = ","
 
-const TEMP_PUZZLE_DATA = {
-  colors: [
-    "#ff0000",
-    "#0000ff",
-    "#00ffff",
-  ],
-  puzzle: [
-    // 3 x 3
-    // ["0","1","0"],
-    // ["0","1","0"],
-    // ["0","1","0"],
-
-    // 8 x 8 
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","2","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-
-
-    // 15 x 15
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],    
-  ],
-};
-
 const Board = ({
   gridViewActive,
-  puzzleData = TEMP_PUZZLE_DATA,
+  puzzleData,
   puzzleGrid,
   puzzleOpacity,
   togglePuzzleGridSquare,
@@ -70,7 +28,6 @@ const Board = ({
     const splitPuzzleData = puzzleData.puzzle.split(PUZZLE_SQUARE_DELIMITER);
     let squareIndex = 0;
 
-    // WARNING: you might be crossing up the x/y here; make sure to check
     for (let y = 0; y < height; y++) {
       result.push([]);
 
@@ -211,17 +168,16 @@ function Square ({
 
   const toggleSquare = () => gridViewActive && togglePuzzleGridSquare(pixelCount);
 
-  const getSquareColor = () => {
-    if (!gridViewActive) {
-      return color;
-    }
-
-    return isFilled ? fillColor : emptyColor;
-  }
-
   const getPuzzleSquareColor = () => isFilled ? fillColor : emptyColor;
 
   const getPuzzleGridOpacity = () => gridViewActive ? puzzleOpacity : 0;
+
+
+  // TODO: Use these to build click and drag functionality
+
+  const handleMouseIn = (event) => {
+    console.log(`handleMouseIn firing on Square ${pixelCount}`, event);
+  };
 
   const handleMouseOut = (event) => {
     console.log(`handleMouseOut firing on Square ${pixelCount}`, event);
@@ -231,11 +187,10 @@ function Square ({
     <div 
       className="board-square"
       onClick={toggleSquare}
-      onMouseLeave={handleMouseOut}
+      // TODO: Uncomment when working on click-and-drag functionality
+      // onMouseEnter={handleMouseIn}
+      // onMouseLeave={handleMouseOut}
     >
-      {/* Just out put string for now */}
-      {/* {squareData} */}
-
       <svg
         height={squareSize + (2 * containerPadding)}
         width={squareSize + (2 * containerPadding)}

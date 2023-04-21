@@ -21,16 +21,28 @@ import {
   auth,
 } from "./firebase/firebase";
 
-// TODO: Remove - only used for useEffect to confirm configs loaded from env vars
-import { devConfig, prodConfig, appEnvironment } from './firebase/firebaseConfig';
+import { 
+  createPuzzle
+} from "./firebase/api";
+
+import callbackIsValid from './utils/callbackIsValid';
 
 import { AuthContext } from './contexts/AuthContext';
+import LoadPuzzlePanel from './components/LoadPuzzlePanel/LoadPuzzlePanel';
 
 // This is magic - see "On Memoized Components" note in obsidian vault
 const MemoizedImageViewer = memo(ImageViewer);
 
 const DEFAULT_AUTHOR = "Anonymous";
 const DEFAULT_NAME = "New puzzle"
+
+const TEMP_USER_PUZZLES = [
+  "Test Puzzle Name 1",
+  "Test Puzzle Name 2",
+  "Test Puzzle Name 3",
+  "Test Puzzle Name 4",
+  "Test Puzzle Name 5",
+];
 
 function App() {
   const {
@@ -44,28 +56,18 @@ function App() {
   const [ author, setAuthor ] = useState();
 
 
-  const [ currentImageUrl, setCurrentImageUrl ] = useState("");
+  // const [ currentImageUrl, setCurrentImageUrl ] = useState("");
   const [ diagnosticWindowActive, setDiagnosticWindowActive ] = useState(false);
   const [ imageError, setImageError ] = useState(null);
   const [ loginWindowMode, setLoginWindowMode ] = useState("disabled");
+  const [ loadPuzzlePanelActive, setLoadPuzzlePanelActive ] = useState(false);
   const [ name, setName ] = useState(DEFAULT_NAME);
   const [ puzzleData, setPuzzleData ] = useState(null);
+  // TODO: Set this when a puzzle is saved, use it to choose create or update operation
+  const [ puzzleId, setPuzzleId ] = useState(null);
   // TODO: Not sure if I like this name - this is the B&W grid for the puzzle
   const [ puzzleGrid, setPuzzleGrid ] = useState([]);
   const [ windowWidth, setWindowWidth ] = useState(window.innerWidth);
-
-  /* 
-    puzzleData has this form:
-
-      puzzleData = {
-        author: "Puzzle creator",
-        colors: ["hex", "color", "strings"],
-        height: 15
-        name: "New Puzzle",
-        puzzle: [["pixel", "data"], ["in", "rows"]],
-        width: 15,
-      };
-  */
 
   const togglePuzzleGridSquare = (pixelCount) => {
     if (pixelCount > puzzleGrid.length){
@@ -85,31 +87,44 @@ function App() {
 
   const resetImageError = useCallback(() => setImageError(null), [setImageError]);
 
-  const savePuzzleDataToDatabase = () => {
+  const savePuzzleDataToDb = (setButtonLock) => {
+    if (!user) {
+      console.error("savePuzzleDataToDb: cannot save, user is not logged in")
+      return;
+    }
+
     if (!puzzleData) {
-      console.error("savePuzzleDataToDatabase: cannot save, puzzleData is null");
+      console.error("savePuzzleDataToDb: cannot save, puzzleData is null");
       return;
     }
 
     const savePuzzle = async () => {
-      // const gridHash = new Sha256();
-      // gridHash.update(puzzleGrid);
-      // const gridHashDigest = await gridHash.digest();
+      const gridHashInput = `${puzzleData.name}${puzzleGrid}`;
+      // console.log("gridHashInput: ", gridHashInput);
+      const gridHash = createHash().update(gridHashInput).digest("hex");
+      // console.log("gridHash: ", gridHash);
 
-      const hashInput = `${puzzleData.name}${puzzleGrid}`;
-      console.log("hashInput: ", hashInput);
-      const gridHash = createHash().update(hashInput).digest("hex");
-      console.log("gridHash: ", gridHash);
+      // TODO: PUZZLES NEED ROW/COL NUMBER APPENDED
 
-      const compiledPuzzleData = {
+      // TODO: Use utils/rotate2dArray and another (yet unwritten) function to sum up
+      //  the row and column numbers for an actual count 
+      const rowNumbers = [];
+      const colNumbers = [];
+
+      const newPuzzleData = {
         ...puzzleData,
         author: user.displayName,
-        grid: puzzleGrid,
-        // gridHash: gridHash,
+        authorId: user.uid,
+        colNumbers: colNumbers,
+        gridHash: gridHash,
+        name: name,
+        rowNumbers: rowNumbers,
       };
 
-  
-      console.log("savePuzzleDataToDataBase: current puzzleData:", compiledPuzzleData);
+      console.log("savePuzzleDataToDataase: current puzzleData:", newPuzzleData);
+      callbackIsValid(setButtonLock) && setButtonLock(true);
+      await createPuzzle(newPuzzleData);
+      callbackIsValid(setButtonLock) && setButtonLock(false);
     };
 
     savePuzzle();
@@ -117,21 +132,23 @@ function App() {
   
   const toggleLoginWindow = () => 
     setLoginWindowMode(loginWindowMode === "disabled" ? "login" : "disabled");
+
+  const toggleLoadPuzzlePanel = () => setLoadPuzzlePanelActive(!loadPuzzlePanelActive);
     
   const toggleSignupWindow = () => 
     setLoginWindowMode(loginWindowMode === "disabled" ? "signup" : "disabled");
 
   // is this necessary? Maybe not
-  const updateCurrentImageUrl = useCallback((url) => setCurrentImageUrl(url), [setCurrentImageUrl]);
+  // const updateCurrentImageUrl = useCallback((url) => setCurrentImageUrl(url), [setCurrentImageUrl]);
 
   const resetImage = useCallback(() => {
     // probably needs more logic?
     setAuthor(DEFAULT_AUTHOR);
-    setCurrentImageUrl("");
+    // setCurrentImageUrl("");
     setName(DEFAULT_NAME);
     setPuzzleData(null);
     resetImageError();
-  }, [setCurrentImageUrl]);
+  }, []);
 
   // TODO: Ensure that this is working properly now that we're not using currentImageUrl
   // const hasImage = currentImageUrl && currentImageUrl.length > 0;
@@ -168,8 +185,10 @@ function App() {
     <div className="App">
       <ControlBar 
         hasImage={hasImage}
+        hasShadow={loginWindowMode !== "disabled"}
         resetImage={resetImage}
-        savePuzzleDataToDatabase={savePuzzleDataToDatabase}
+        savePuzzleDataToDb={savePuzzleDataToDb}
+        toggleLoadPuzzlePanel={toggleLoadPuzzlePanel}
         toggleLoginWindow={toggleLoginWindow}
         toggleSignupWindow={toggleSignupWindow}
       />
@@ -179,10 +198,16 @@ function App() {
         windowMode={loginWindowMode}
       />
 
+      <LoadPuzzlePanel
+        panelIsActive={loadPuzzlePanelActive}
+        // panelIsActive={true}
+        userPuzzles={TEMP_USER_PUZZLES}
+      />
+
       <div className="app-body">
         {/* <ImageViewer  */}
         <MemoizedImageViewer 
-          currentImageUrl={currentImageUrl}
+          // currentImageUrl={currentImageUrl}
           hasImage={hasImage}
           imageError={imageError}
           puzzleData={puzzleData}
@@ -192,7 +217,7 @@ function App() {
           setPuzzleData={setPuzzleData}
           setImageError={setImageError}
           togglePuzzleGridSquare={togglePuzzleGridSquare}
-          updateCurrentImageUrl={updateCurrentImageUrl}
+          // updateCurrentImageUrl={updateCurrentImageUrl}
           windowWidth={windowWidth}
         />
         <ImageMetadata

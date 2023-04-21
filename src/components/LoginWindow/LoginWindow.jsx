@@ -62,47 +62,81 @@ const LoginWindow = ({
 }
 
 function LoginForm ({ closeWindow }) {
+  const PASSWORD_ERROR_STRING = "Incorrect password.";
+
   const [ email, setEmail ] = useState("");
+  const [ loginPending, setLoginPending ] = useState(false);
   const [ password, setPassword ] = useState("");
+  const [ passwordError, setPasswordError ] = useState();
 
   const { login } = useContext(AuthContext);
 
-  const canSubmit = email.length > 0 && password.length > 0;
+  const canSubmit = email.length > 0 && password.length > 0 && !loginPending;
 
-  const handleSubmit = () => {
+  const loginButtonType = loginPending ? "waiting" : "login";
+
+  const hasPasswordError = 
+    passwordError && typeof passwordError === 'string' && passwordError.length > 0;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    setLoginPending(true);
+    
+    const failureCallback = () => {
+      setLoginPending(false);
+      setPasswordError(PASSWORD_ERROR_STRING)
+    };
+
     console.log("Firing LoginForm handleSubmit");
-    login(email, password);
+    const result = login(email, password, closeWindow, failureCallback);
+
+    console.log("login result: ", result);
 
     // TODO: Only close on success
     // assuming success here
-    closeWindow();
+    // closeWindow();
   };
   
   return (
     <div className="login-form">
       <h1>Login</h1>
 
-      <TextInput
-        label="email"
-        setValue={setEmail}
-        value={email}
-      />
+      <form onSubmit={handleSubmit}>
+        <TextInput
+          label="email"
+          setValue={setEmail}
+          value={email}
+        />
 
-      <TextInput
-        label="password"
-        password={true}
-        setValue={setPassword}
-        value={password}
-      />
+        <TextInput
+          error={hasPasswordError}
+          label="password"
+          onChange={() => setPasswordError("")}
+          password={true}
+          setValue={setPassword}
+          value={password}
+        />
 
-      <Button
-        className="login-button"
-        disabled={!canSubmit}
-        onClick={handleSubmit}
-        type="login"
-      >
-        Login
-      </Button>
+        {
+          hasPasswordError && (
+            <div className="auth-form-error">
+              Incorrect password.
+            </div>
+          )
+        }
+
+        <Button
+          className="login-button"
+          disabled={!canSubmit}
+          isFormSubmit
+          onClick={handleSubmit}
+          type={loginButtonType}
+        >
+          Login
+        </Button>
+
+      </form>
     </div>
   ); 
 }
@@ -123,55 +157,59 @@ function SignUpForm ({ closeWindow }) {
   const canSubmit = email.length > 0 && username.length > 0 && password.length > 0 &&
     confirmPassword.length > 0 && passwordsMatch; 
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     console.log("Firing SignupForm handleSubmit");
-    register(email, password, username);
-
-    // TODO: only close on register success
-    // also assuming success here
-    closeWindow();
+    register(email, password, username, closeWindow);
+    // closeWindow();
   };
 
   return (
     <div className="login-form">
       <h1>Register</h1>
 
-      <TextInput
-        label="username"
-        setValue={setUsername}
-        value={username}
-      />
-
-      <TextInput
-        label="email"
-        setValue={setEmail}
-        value={email}
-      />
-
-      <TextInput
-        error={passwordError}
-        label="password"
-        password={true}
-        setValue={setPassword}
-        value={password}
+      <form 
+        autoComplete='off'
+        onSubmit={handleSubmit}
+      >
+        <TextInput
+          label="username"
+          setValue={setUsername}
+          value={username}
         />
 
-      <TextInput
-        error={passwordError}
-        label="confirm password"
-        password={true}
-        value={confirmPassword}
-        setValue={setConfirmPassword}
-      />
+        <TextInput
+          label="email"
+          setValue={setEmail}
+          value={email}
+        />
 
-      <Button
-        className="login-button"
-        disabled={!canSubmit}
-        onClick={handleSubmit}
-        type="signup"
-      >
-        Signup
-      </Button>
+        <TextInput
+          error={passwordError}
+          label="password"
+          password={true}
+          setValue={setPassword}
+          value={password}
+          />
+
+        <TextInput
+          error={passwordError}
+          label="confirm password"
+          password={true}
+          value={confirmPassword}
+          setValue={setConfirmPassword}
+        />
+
+        <Button
+          className="login-button"
+          disabled={!canSubmit}
+          isFormSubmit
+          onClick={handleSubmit}
+          type="signup"
+        >
+          Signup
+        </Button>
+      </form>
     </div>
   ); 
 }

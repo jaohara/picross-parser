@@ -1,9 +1,11 @@
 // common sizes/variables
 $common-border-radius: 12px;
 // $common-border-radius: 48px;
-$common-box-shadow: 0px 4px 4px rgba(25,25,25,0.25);
+// $common-box-shadow: 0px 4px 4px rgba(25,25,25,0.25);
+$common-box-shadow: 0px 12px 32px #00000033;
 $common-padding: 1rem;
 $common-margin: 1rem;
+$full-screen-background-opacity: .6;
 $section-header-font-size: 1.4rem;
 
 // fonts
@@ -54,6 +56,7 @@ $error-message-font-color: $error-message-border-color;
 $login-container-background-color: $dark-gray-300;
 $opacity-slider-background-color: $light-gray-200;
 $opacity-slider-thumb-color: $dark-gray-300;
+$puzzle-panel-list-item-hover-background-color: $light-gray-300;
 $pane-background-color: $light-gray-100;
 $control-bar-background-color: $pane-background-color;
 $square-border-color: $square-gray;
@@ -118,5 +121,25 @@ $l-breakpoint: 1920px;
   //1920px
   @media (min-width: $l-breakpoint) {
     width: 1440px;
+  }
+}
+
+@mixin full-screen-panel-styling {
+  backdrop-filter: blur(20px);
+  background-color: rgba($login-container-background-color, $full-screen-background-opacity);
+  height: 100vh;
+  left: 0;
+  opacity: 0%;
+  position: fixed;
+  transition: opacity $ui-fast-transition;
+  top: 0;
+  width: 100vw;
+  z-index: -100;
+  // visibility: hidden;
+
+  &.active {
+    // visibility: visible;
+    opacity: 100%;
+    z-index: 10;
   }
 }
