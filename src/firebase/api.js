@@ -4,7 +4,10 @@ import {
   collection,
   doc,
   getDoc,
+  getDocs,
+  query,
   setDoc,
+  where,
 } from "firebase/firestore";
 
 import { db } from "./firebase";
@@ -59,12 +62,22 @@ export async function createPuzzle(newPuzzleData){
   }
 }
 
-export async function getUserPuzzles(authorId){
+export async function getUserPuzzles(authorId, setUserPuzzles){
   console.log("api: getUserPuzzles: received authorId:", authorId);
 
-  // TODO: Implement
+  // build query to get all puzzles for the given authorId
+  const userPuzzlesQuery = query(puzzlesCollection, where("authorId", "==", authorId));
+  
+  // execute the query
+  const userPuzzlesSnapshot = await getDocs(userPuzzlesQuery);
 
-  // how does this handle the subscription?
+  // get the documents from the snapshot
+  const userPuzzles = userPuzzlesSnapshot.docs.map((doc) => doc.data());
+
+  console.log("api: getUserPuzzles: received the following user puzzles: ", userPuzzles);
+
+  // store the puzzles 
+  setUserPuzzles(userPuzzles);
 }
 
 export async function updatePuzzle(updatedPuzzleData){

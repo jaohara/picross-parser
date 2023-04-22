@@ -22,7 +22,7 @@ import {
 } from "./firebase/firebase";
 
 import { 
-  createPuzzle
+  createPuzzle,
 } from "./firebase/api";
 
 import callbackIsValid from './utils/callbackIsValid';
@@ -46,7 +46,8 @@ const TEMP_USER_PUZZLES = [
 
 function App() {
   const {
-    user
+    user,
+    userPuzzles,
   } = useContext(AuthContext);
 
 

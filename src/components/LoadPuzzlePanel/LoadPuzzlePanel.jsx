@@ -20,8 +20,11 @@ const LoadPuzzlePanel = ({
 
   const puzzlesAreValid = userPuzzles && Array.isArray(userPuzzles) && userPuzzles.length > 0;
 
-  const puzzleListItems = puzzlesAreValid ? userPuzzles.map(puzzle => (
-    <li className='puzzle-panel-list-item'>
+  const puzzleListItems = puzzlesAreValid ? userPuzzles.map((puzzle, index) => (
+    <li 
+      className='puzzle-panel-list-item'
+      key={`puzzle-panel-list-item-${index}`}
+    >
       <div className="puzzle-panel-list-item-icon">
 
       </div>

@@ -14,12 +14,16 @@ import {
 
 import { auth } from "../firebase/firebase";
 
-import { createUserEntity } from "../firebase/api";
+import { 
+  createUserEntity,
+  getUserPuzzles,
+} from "../firebase/api";
 
 const AuthContext = createContext(undefined);
 
 function AuthContextProvider(props) {
   const [ user, setUser ] = useState(auth.currentUser);
+  const [ userPuzzles, setUserPuzzles ] = useState([]);
 
   const logout = () => {
     console.log("AuthContext: logout: calling logout...");
@@ -89,6 +93,15 @@ function AuthContextProvider(props) {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setUser(user ? user : null);
+
+      // get all user puzzles
+      if (user) {
+        const fetchData = async () => {
+          getUserPuzzles(user.uid, setUserPuzzles);
+        };
+
+        fetchData();
+      }
     });
 
     return () => unsubscribe();
