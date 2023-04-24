@@ -3,14 +3,14 @@ import React, { useContext } from 'react';
 import "./DiagnosticWindow.scss";
 
 import Button from "../Button/Button";
-import { AuthContext } from '../../contexts/AuthContext';
+import { UserContext } from '../../contexts/UserContext';
 
 const DiagnosticWindow = ({ 
   diagnosticWindowActive,
   logAuth = () => { console.log("logAuth called")},
   setDiagnosticWindowActive 
 }) => {
-  const { logUser } = useContext(AuthContext);
+  const { logUser } = useContext(UserContext);
 
   const getClassNames = () => `
     diagnostic-window

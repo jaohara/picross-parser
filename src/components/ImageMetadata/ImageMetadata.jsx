@@ -14,12 +14,10 @@ import Pane from '../Pane/Pane';
 import TextInput from '../TextInput/TextInput';
 
 const ImageMetadata = ({
-  author,
   imageError,
   name, 
   puzzleData,
   puzzleGridString,
-  setAuthor,
   setName,
 }) => {
   return ( 
@@ -27,11 +25,9 @@ const ImageMetadata = ({
       {
         puzzleData ? (
           <PuzzleData 
-            author={author}
             name={name}
             puzzleData={puzzleData}
             puzzleGridString={puzzleGridString}
-            setAuthor={setAuthor}
             setName={setName}
           />
         ) : (
@@ -56,11 +52,9 @@ function NoPuzzleMessage () {
 }
 
 function PuzzleData ({ 
-  author,
   name,
   puzzleData,
   puzzleGridString,
-  setAuthor,
   setName,
 }) {
   const { 

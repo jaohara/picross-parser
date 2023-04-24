@@ -1,0 +1,12 @@
+# TODO
+- [ ] Make login form not close and give an error on an unrecogized user
+- [ ] Make Delete button in `LoadPuzzlesPanel` require 2 clicks to avoid accidental deletion - `LoadPuzzlesPanel.jsx`
+- [ ] Write function to sum up grid rows into numbers - `utils/new`
+  - `0,1,1,0,1` becomes `2 1`
+- [ ] Use `rotate2dArray` and the above function to add row/col nums for actual count  - `App.jsx` 
+- [ ] Make sure puzzles are being saved with all relevant data
+- [ ] After puzzle is saved, make the `savedPuzzleId` state item is being properly set - `App.jsx`
+- [ ] Implement a way to load old puzzles when clicking an item in the `LoadPuzzlePanel` - `App.jsx` and `LoadPuzzlePanel.jsx`
+- [ ] Implement the `updatePuzzle` function - `api.js`
+- [ ] Use the `updatePuzzle` function when saving an existing puzzle - `ControlBar.jsx`
+- [ ] Work on `Board` click and drag functionality - `Board.jsx`

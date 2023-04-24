@@ -12,7 +12,7 @@ import "./LoginWindow.scss";
 //   signUp,
 // } from "../../firebase/auth";
 
-import { AuthContext } from '../../contexts/AuthContext';
+import { UserContext } from '../../contexts/UserContext';
 
 import Button from '../Button/Button';
 import TextInput from '../TextInput/TextInput';
@@ -69,7 +69,7 @@ function LoginForm ({ closeWindow }) {
   const [ password, setPassword ] = useState("");
   const [ passwordError, setPasswordError ] = useState();
 
-  const { login } = useContext(AuthContext);
+  const { login } = useContext(UserContext);
 
   const canSubmit = email.length > 0 && password.length > 0 && !loginPending;
 
@@ -147,7 +147,7 @@ function SignUpForm ({ closeWindow }) {
   const [ password, setPassword ] = useState("");
   const [ username, setUsername ] = useState("");
 
-  const { register } = useContext(AuthContext);
+  const { register } = useContext(UserContext);
   
   const passwordsMatch = password === confirmPassword;
   

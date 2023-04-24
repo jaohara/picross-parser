@@ -14,12 +14,18 @@
   transition: 
     background-color g.$ui-fast-transition, 
     border-color g.$ui-fast-transition, 
+    color g.$ui-fast-transition, 
     opacity g.$ui-fast-transition;
 
   &:hover:not(:disabled) {
     background-color: g.$button-hover-background-color;
     border-color: g.$button-border-hover-color;
     cursor: pointer;
+
+    &.delete-unlocked { 
+      background-color: g.$delete-unlocked-fill-color;
+      border-color: g.$delete-unlocked-fill-color;
+    }
   }
 
   &:disabled {
@@ -41,6 +47,10 @@
     }
   }
 
+  &.delete-unlocked {
+    color: g.$delete-unlocked-font-color;
+  }
+
   &.diagnostic-window-button {
     &:hover { 
       // background-color: g.$diagnostic-window-button-hover-color;
@@ -55,6 +65,7 @@
   display: flex;
   font-size: 1.2rem;
   margin-right: .5rem;
+  pointer-events: none;
   justify-content: center;
 
   &.no-margin {

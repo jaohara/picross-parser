@@ -30,7 +30,7 @@ $light-gray-300: #c8cbce;
 $light-gray-400: #a4a9ae;
 $red-100: #ff6666;
 $red-200: #da4c4c;
-$red-300: #c02a2a;
+$red-300: #de3333;
 
 $square-gray: #35363866;
 
@@ -44,6 +44,8 @@ $button-border-color: $light-gray-200;
 $button-border-hover-color: $dark-gray-200;
 $button-hover-background-color: transparent;
 // $button-hover-background-color: $light-gray-200;
+$delete-unlocked-fill-color: $red-300;
+$delete-unlocked-font-color: $light-gray-100;
 $diagnostic-button-font-hover-color: $dark-gray-300;
 $diagnostic-window-background-color: $dark-gray-300;
 $diagnostic-button-background-hover-color: $light-gray-100;

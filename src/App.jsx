@@ -26,36 +26,27 @@ import {
 } from "./firebase/api";
 
 import callbackIsValid from './utils/callbackIsValid';
+import rotate2dArray from './utils/rotate2dArray';
+import sumRowNumbers from './utils/sumRowNumbers';
+import splitPuzzleGridByRowWidth from './utils/splitPuzzleGridByRowWidth';
 
-import { AuthContext } from './contexts/AuthContext';
+import { UserContext } from './contexts/UserContext';
 import LoadPuzzlePanel from './components/LoadPuzzlePanel/LoadPuzzlePanel';
 
-// This is magic - see "On Memoized Components" note in obsidian vault
+// See "On Memoized Components" note in obsidian vault
 const MemoizedImageViewer = memo(ImageViewer);
 
-const DEFAULT_AUTHOR = "Anonymous";
 const DEFAULT_NAME = "New puzzle"
 
-const TEMP_USER_PUZZLES = [
-  "Test Puzzle Name 1",
-  "Test Puzzle Name 2",
-  "Test Puzzle Name 3",
-  "Test Puzzle Name 4",
-  "Test Puzzle Name 5",
-];
-
 function App() {
+  const SHOW_DIAGNOSTIC_WINDOW = false;
+
   const {
+    addUserPuzzle,
+    deleteUserPuzzle,
     user,
     userPuzzles,
-  } = useContext(AuthContext);
-
-
-  // maybe make this handled by a hook?
-
-  // TODO: REMOVE THIS, insert user.displayName at save instead
-  const [ author, setAuthor ] = useState();
-
+  } = useContext(UserContext);
 
   // const [ currentImageUrl, setCurrentImageUrl ] = useState("");
   const [ diagnosticWindowActive, setDiagnosticWindowActive ] = useState(false);
@@ -64,10 +55,10 @@ function App() {
   const [ loadPuzzlePanelActive, setLoadPuzzlePanelActive ] = useState(false);
   const [ name, setName ] = useState(DEFAULT_NAME);
   const [ puzzleData, setPuzzleData ] = useState(null);
-  // TODO: Set this when a puzzle is saved, use it to choose create or update operation
-  const [ puzzleId, setPuzzleId ] = useState(null);
   // TODO: Not sure if I like this name - this is the B&W grid for the puzzle
   const [ puzzleGrid, setPuzzleGrid ] = useState([]);
+  // TODO: Set this when a puzzle is saved, use it to choose create or update operation
+  const [ savedPuzzleId, setSavedPuzzleId ] = useState(null);
   const [ windowWidth, setWindowWidth ] = useState(window.innerWidth);
 
   const togglePuzzleGridSquare = (pixelCount) => {
@@ -100,17 +91,21 @@ function App() {
     }
 
     const savePuzzle = async () => {
+      // create a hash from the puzzle name and solution
       const gridHashInput = `${puzzleData.name}${puzzleGrid}`;
-      // console.log("gridHashInput: ", gridHashInput);
       const gridHash = createHash().update(gridHashInput).digest("hex");
-      // console.log("gridHash: ", gridHash);
 
-      // TODO: PUZZLES NEED ROW/COL NUMBER APPENDED
+      // split the puzzleGrid (solution) and get a rotated copy for columns
+      const splitPuzzleGrid = splitPuzzleGridByRowWidth(puzzleGrid, puzzleData.width);
+      const rotatedPuzzleGrid = rotate2dArray(splitPuzzleGrid);
+      rotatedPuzzleGrid.reverse();
 
-      // TODO: Use utils/rotate2dArray and another (yet unwritten) function to sum up
-      //  the row and column numbers for an actual count 
-      const rowNumbers = [];
-      const colNumbers = [];
+      // helper function to get 2d array in a format for firestore
+      const getGridNumbers = (input) => JSON.stringify(input.map((row) => sumRowNumbers(row)));
+
+      // compute row and column numbers
+      const rowNumbers = getGridNumbers(splitPuzzleGrid);
+      const colNumbers = getGridNumbers(rotatedPuzzleGrid);
 
       const newPuzzleData = {
         ...puzzleData,
@@ -121,10 +116,12 @@ function App() {
         name: name,
         rowNumbers: rowNumbers,
       };
-
-      console.log("savePuzzleDataToDataase: current puzzleData:", newPuzzleData);
+      
+      // console.log("savePuzzleDataToDatabase: current puzzleData:", newPuzzleData);
       callbackIsValid(setButtonLock) && setButtonLock(true);
-      await createPuzzle(newPuzzleData);
+      const createdPuzzleData = await createPuzzle(newPuzzleData);
+      addUserPuzzle(createdPuzzleData);
+      setSavedPuzzleId(newPuzzleData.id);
       callbackIsValid(setButtonLock) && setButtonLock(false);
     };
 
@@ -139,20 +136,15 @@ function App() {
   const toggleSignupWindow = () => 
     setLoginWindowMode(loginWindowMode === "disabled" ? "signup" : "disabled");
 
-  // is this necessary? Maybe not
-  // const updateCurrentImageUrl = useCallback((url) => setCurrentImageUrl(url), [setCurrentImageUrl]);
-
   const resetImage = useCallback(() => {
     // probably needs more logic?
-    setAuthor(DEFAULT_AUTHOR);
-    // setCurrentImageUrl("");
     setName(DEFAULT_NAME);
     setPuzzleData(null);
+    setSavedPuzzleId(null);
     resetImageError();
   }, []);
 
   // TODO: Ensure that this is working properly now that we're not using currentImageUrl
-  // const hasImage = currentImageUrl && currentImageUrl.length > 0;
   const hasImage = puzzleData !== null;
 
   useEffect(() => {
@@ -180,6 +172,12 @@ function App() {
     setPuzzleGrid(grid);
   }, [puzzleData]);
 
+
+  // TODO: Remove, use to debug savedPuzzleId being set
+  useEffect(() => {
+    console.log("savedPuzzleId updated: ", savedPuzzleId);
+  }, [savedPuzzleId])
+
   const puzzleGridString = puzzleGrid.join("");
 
   return (
@@ -200,15 +198,13 @@ function App() {
       />
 
       <LoadPuzzlePanel
+        deleteUserPuzzle={deleteUserPuzzle}
         panelIsActive={loadPuzzlePanelActive}
-        // panelIsActive={true}
-        userPuzzles={TEMP_USER_PUZZLES}
+        userPuzzles={userPuzzles}
       />
 
       <div className="app-body">
-        {/* <ImageViewer  */}
         <MemoizedImageViewer 
-          // currentImageUrl={currentImageUrl}
           hasImage={hasImage}
           imageError={imageError}
           puzzleData={puzzleData}
@@ -218,31 +214,29 @@ function App() {
           setPuzzleData={setPuzzleData}
           setImageError={setImageError}
           togglePuzzleGridSquare={togglePuzzleGridSquare}
-          // updateCurrentImageUrl={updateCurrentImageUrl}
           windowWidth={windowWidth}
         />
         <ImageMetadata
-          author={author}
           imageError={imageError}
           name={name}
           puzzleData={puzzleData}
           puzzleGridString={puzzleGridString}
-          setAuthor={setAuthor}
           setName={setName}
         />
 
-        <DiagnosticWindow
-          diagnosticWindowActive={diagnosticWindowActive}
-          logAuth={logAuth}
-          setDiagnosticWindowActive={setDiagnosticWindowActive}
-        />
-
-        
+        {
+          SHOW_DIAGNOSTIC_WINDOW && (
+            <DiagnosticWindow
+              diagnosticWindowActive={diagnosticWindowActive}
+              logAuth={logAuth}
+              setDiagnosticWindowActive={setDiagnosticWindowActive}
+            />
+          )
+        }
       </div>
     </div>
   )
 }
-
 
 // Log functions to be passed to DiagnosticWindow
 const logAuth = () => console.log("firebase.Auth: ", auth);

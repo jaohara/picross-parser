@@ -27,6 +27,7 @@ const Button = ({
   disabled,
   isFormSubmit = false,
   onClick,
+  onMouseOut = () => {},
   type = "none",
 }) => {
   const buttonIcons = {
@@ -71,6 +72,7 @@ const Button = ({
       disabled={disabled}
       className={`${className} app-button`}
       onClick={onClick}
+      onMouseOut={onMouseOut}
       type={isFormSubmit ? "submit" : "button"}
     >
       {getButtonIcon()}

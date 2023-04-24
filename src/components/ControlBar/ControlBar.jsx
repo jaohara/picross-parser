@@ -6,7 +6,7 @@ import React, {
 import gridIcon from "../../../public/grid-2.svg";
 import "./ControlBar.scss";
 
-import { AuthContext } from '../../contexts/AuthContext';
+import { UserContext } from '../../contexts/UserContext';
 
 import Button from '../Button/Button';
 
@@ -71,7 +71,7 @@ function Controls ({
   const [ imageIsSaving, setImageIsSaving ] = useState(false);
   // const [ puzzlePanelActive, setPuzzlePanelActive ] = useState(false);
 
-  const { logout, user } = useContext(AuthContext);
+  const { logout, user } = useContext(UserContext);
 
   const handleSaveImage = () => {
     savePuzzleDataToDb(setImageIsSaving);

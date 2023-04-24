@@ -16,21 +16,31 @@ import { auth } from "../firebase/firebase";
 
 import { 
   createUserEntity,
+  deletePuzzle,
   getUserPuzzles,
 } from "../firebase/api";
 
-const AuthContext = createContext(undefined);
+import callbackIsValid from "../utils/callbackIsValid";
 
-function AuthContextProvider(props) {
+const UserContext = createContext(undefined);
+
+function UserContextProvider(props) {
   const [ user, setUser ] = useState(auth.currentUser);
   const [ userPuzzles, setUserPuzzles ] = useState([]);
 
+  const addUserPuzzle = (newPuzzleData) => setUserPuzzles([newPuzzleData, ...userPuzzles]);
+
+  const deleteUserPuzzle = (removedPuzzleData) => {
+    deletePuzzle(removedPuzzleData);
+    setUserPuzzles(userPuzzles.filter((puzzle) => puzzle.id !== removedPuzzleData.id))
+  }
+
   const logout = () => {
-    console.log("AuthContext: logout: calling logout...");
+    console.log("UserContext: logout: calling logout...");
 
     return signOut(auth)
       .catch((error) => {
-        console.error("AuthContext: logout: error: ", error);
+        console.error("UserContext: logout: error: ", error);
       })
   };
   
@@ -43,31 +53,31 @@ function AuthContextProvider(props) {
     //  get more specific in the event of an invalid user email
     failureCallback = () => {},
   ) => {
-    console.log(`AuthContext: login called for email: ${email}`);
+    console.log(`UserContext: login called for email: ${email}`);
 
     return signInWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         console.log("login: success, userCredentials are:", userCredentials);
-        successCallback();
-        // setUser(userCredentials.user);
+        callbackIsValid(successCallback) && successCallback();
       })
       .catch((error) => {
         console.error("auth: login: error logging in: ", error);
-        console.log("failureCallback: ", failureCallback);
-        console.log("typeof failureCallback: ", typeof failureCallback);
-        failureCallback();
+        callbackIsValid(failureCallback) && failureCallback();
       });
   };
   
   const register = (
-    email, password, displayName, successCallback = () => {}) => {
-    console.log(`AuthContext: register called with email: ${email}, displayName: ${displayName}`);
+    email, 
+    password, 
+    displayName, 
+    successCallback = () => {}
+  ) => {
+    console.log(`UserContext: register called with email: ${email}, displayName: ${displayName}`);
     let user = null;
 
     return createUserWithEmailAndPassword(auth, email, password)
       .then((userCredentials) => {
         console.log("register: success, userCredentials are:", userCredentials);
-        // const user = userCredentials.user;
         user = userCredentials.user;
         
         // user has been created, create user entity with updated profile
@@ -80,14 +90,14 @@ function AuthContextProvider(props) {
       })
       .then((userEntityCreationSuccess) => {
         console.log("register: success, user entity was created:", userEntityCreationSuccess);
-        successCallback()
+        callbackIsValid(successCallback) && successCallback()
       })
       .catch((error) => {
         console.error("auth: register: error creating account: ", error);
       });
   };
 
-  const logUser = () => console.log("AuthContext: user: ", user);
+  const logUser = () => console.log("UserContext: user: ", user);
 
   // setup firebase auth listener
   useEffect(() => {
@@ -108,18 +118,21 @@ function AuthContextProvider(props) {
   }, []);
 
   return (
-    <AuthContext.Provider
+    <UserContext.Provider
       value={{
+        addUserPuzzle,
+        deleteUserPuzzle,
         login,
         logout,
         logUser,
         register,
         user,
+        userPuzzles,
       }}
     >
       {props.children}
-    </AuthContext.Provider>
+    </UserContext.Provider>
   );
 }
 
-export { AuthContext, AuthContextProvider };
+export { UserContext, UserContextProvider };
