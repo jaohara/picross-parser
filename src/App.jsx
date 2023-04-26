@@ -158,6 +158,8 @@ function App() {
     // delete loadedPuzzleData.grid;
     // delete loadedPuzzleData.id;
 
+    console.log("loadPuzzle: given loadedPuzzleData:", loadedPuzzleData);
+
     setPuzzleData(loadedPuzzleData);
     setSavedPuzzleId(loadedPuzzleId);
     setPuzzleGrid(loadedPuzzleGrid);
@@ -203,9 +205,20 @@ function App() {
       return;
     }
 
-    const puzzleSize = puzzleData.height * puzzleData.width;
-    const grid = new Array(puzzleSize).fill(0);
-    setPuzzleGrid(grid);
+    
+    let newGrid;
+
+    // if a puzzle is loaded and has a grid
+    if (puzzleData.grid) {
+      newGrid = puzzleData.grid;
+    }
+    // if a puzzle was parsed from an image and doesn't have a grid
+    else {
+      const puzzleSize = puzzleData.height * puzzleData.width;
+      newGrid = new Array(puzzleSize).fill(0);
+    }
+
+    setPuzzleGrid(newGrid);
   }, [puzzleData]);
 
 
