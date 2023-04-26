@@ -1,30 +1,50 @@
 import React, {
   useContext,
+  useState,
 } from 'react';
 
 import gridIcon from "../../../public/grid-2.svg";
 import "./ControlBar.scss";
 
-import { AuthContext } from '../../contexts/AuthContext';
+import { UserContext } from '../../contexts/UserContext';
 
 import Button from '../Button/Button';
 
+const TEMP_USER_PUZZLES = [
+  "Test Puzzle Name 1",
+  "Test Puzzle Name 2",
+  "Test Puzzle Name 3",
+  "Test Puzzle Name 4",
+  "Test Puzzle Name 5",
+];
+
 const ControlBar = ({
   hasImage,
+  hasShadow,
   resetImage,
+  savePuzzleDataToDb,
+  toggleLoadPuzzlePanel,
   toggleLoginWindow,
   toggleSignupWindow,
+  userPuzzles = TEMP_USER_PUZZLES,
 }) => {
+  const getClassNamesString = () => `
+    control-bar
+    ${hasShadow ? "shadow-active" : ""}
+  `;
+
   return ( 
-    <div className="control-bar">
-      {/* <span className="logo">picross parser.</span> */}
+    <div className={getClassNamesString()}>
       <Logo />
 
       <Controls
         hasImage={hasImage} 
         resetImage={resetImage}
+        savePuzzleDataToDb={savePuzzleDataToDb}
+        toggleLoadPuzzlePanel={toggleLoadPuzzlePanel}
         toggleLoginWindow={toggleLoginWindow}
         toggleSignupWindow={toggleSignupWindow}
+        userPuzzles={userPuzzles}
       />
     </div>
   );
@@ -42,13 +62,35 @@ function Logo () {
 function Controls ({
   hasImage,
   resetImage,
-  // TODO: Remove placeholder later
-  saveImage = () => { console.log("saveImage clicked!") },
-  toggleLoginWindow = () => { console.log("toggleLoginWindow clicked!") },
-  toggleSignupWindow = () => { console.log("toggleSignupWindow clicked!")}, 
+  savePuzzleDataToDb,
+  toggleLoadPuzzlePanel,
+  toggleLoginWindow,
+  toggleSignupWindow, 
 }) {
 
-  const { logout, user } = useContext(AuthContext);
+  const [ imageIsSaving, setImageIsSaving ] = useState(false);
+  // const [ puzzlePanelActive, setPuzzlePanelActive ] = useState(false);
+
+  const { logout, user } = useContext(UserContext);
+
+  const handleSaveImage = () => {
+    savePuzzleDataToDb(setImageIsSaving);
+  };
+
+  // TODO: This needs to receive whether or not the puzzle is loading from somewhere
+  const loadButtonType = "load";
+
+  const saveButtonType = imageIsSaving ? "waiting" : "save";
+
+  const clearImageButton = (      
+    <Button
+      disabled={!hasImage}
+      onClick={resetImage}
+      type="clear"
+    >
+      Clear Puzzle
+    </Button>
+  );
 
   return (
     <div className="controls-wrapper">
@@ -56,6 +98,7 @@ function Controls ({
       {
         !user ? (
           <>
+            {clearImageButton}
             <Button 
               onClick={toggleLoginWindow}
               type="login"
@@ -71,32 +114,35 @@ function Controls ({
           </>
         ) : (
           <>
+            <Button
+              disabled={!hasImage || imageIsSaving}
+              // onClick={savePuzzleDataToDb}
+              onClick={handleSaveImage}
+              type={saveButtonType}
+            >
+              {
+                imageIsSaving ? "Saving..." : "Save Puzzle"
+              }
+            </Button>
+            <Button
+              onClick={toggleLoadPuzzlePanel}
+              type={loadButtonType}
+            >
+              Load Puzzle
+            </Button>
+            {clearImageButton}
             <Button 
               onClick={logout}
               type='logout'
             >
               Logout
             </Button>
-            <Button
-              disabled={!hasImage}
-              onClick={saveImage}
-              type="save"
-            >
-              Save Puzzle 
-            </Button>
           </>
         )
       }
-
-      <Button
-        disabled={!hasImage}
-        onClick={resetImage}
-        type="clear"
-      >
-        Clear Image
-      </Button>
     </div>
   )
 }
+
  
 export default ControlBar;

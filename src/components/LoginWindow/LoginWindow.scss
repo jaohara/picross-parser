@@ -3,19 +3,20 @@
 $background-opacity: .6;
 
 .login-window-container { 
+  @include g.full-screen-panel-styling();
   align-items: center;
-  backdrop-filter: blur(20px);
-  background-color: rgba(g.$login-container-background-color, $background-opacity);
+  // backdrop-filter: blur(20px);
+  // background-color: rgba(g.$login-container-background-color, $background-opacity);
   display: flex;
-  height: 100vh;
+  // height: 100vh;
   justify-content: center;
-  left: 0;
-  opacity: 0%;
-  position: fixed;
-  transition: opacity g.$ui-fast-transition;
-  top: 0;
-  width: 100vw;
-  z-index: -100;
+  // left: 0;
+  // opacity: 0%;
+  // position: fixed;
+  // transition: opacity g.$ui-fast-transition;
+  // top: 0;
+  // width: 100vw;
+  // z-index: -100;
   // visibility: hidden;
 
   &.active {
@@ -32,7 +33,7 @@ $background-opacity: .6;
   background-color: g.$pane-background-color;
   // border: 2px solid g.$button-border-hover-color;
   border-radius: g.$common-border-radius;
-  box-shadow: 0px 12px 32px #00000033;
+  box-shadow: g.$common-box-shadow;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -53,4 +54,12 @@ $background-opacity: .6;
 
 .login-button {
   margin-top: 3rem;
+}
+
+.auth-form-error {
+  background-color: g.$error-message-background-color;
+  border-radius: g.$common-border-radius;
+  // margin-bottom: 2rem;
+  margin-top: 0rem;
+  padding: g.$common-padding;
 }

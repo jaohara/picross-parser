@@ -11,6 +11,12 @@
   position: fixed;
   top: g.$app-body-padding;
   width: calc(100vw - g.$app-body-padding - g.$app-body-padding);
+  // to have control bar persist with loading screens
+  z-index: 11;
+
+  &.shadow-active {
+    box-shadow: g.$common-box-shadow;
+  }
 }
 
 .logo {

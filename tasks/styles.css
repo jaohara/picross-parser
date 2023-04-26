@@ -1,0 +1,10 @@
+.github-markdown-body { 
+  background-color: #1e1e1e;
+  font-size: .9em;
+}
+
+.github-markdown-body h1, .github-markdown-body pre, .github-markdown-body code {
+  font-family: "JetBrains Mono";
+  font-weight: bold;
+  color: #3b8eea;
+}

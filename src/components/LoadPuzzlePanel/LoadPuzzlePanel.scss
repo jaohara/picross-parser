@@ -1,0 +1,65 @@
+@use "../../styles/globals.scss" as g;
+
+.puzzle-panel-container {
+  @include g.full-screen-panel-styling();
+}
+
+.puzzle-panel {
+  background-color: g.$pane-background-color;
+  border-radius: g.$common-border-radius;
+  box-shadow: g.$common-box-shadow;
+  padding: g.$common-padding;
+  // opacity: 0%;
+  position: absolute;
+  // transition: opacity g.$ui-fast-transition;
+  top: 6rem;
+  right: g.$app-body-padding;
+  width: 40rem;
+  z-index: -100;
+
+  // &.active {
+  //   opacity: 100%;
+  //   z-index: 10;
+  // }
+
+  h1 {
+    @include g.section-header-styles();
+  }
+}
+
+.puzzle-panel-list {
+  list-style-type: none;
+  margin: 0rem;
+  padding: 0rem;
+}
+
+.puzzle-panel-list-item {
+  align-items: center;
+  background-color: transparent;
+  border-radius: g.$common-border-radius;
+  display: flex;
+  height: 3rem;
+  justify-content: space-between;
+  padding: 0rem g.$common-padding;
+  transition: background-color g.$ui-fast-transition;
+
+  &:hover {
+    background-color: g.$puzzle-panel-list-item-hover-background-color;
+    cursor: pointer;
+
+    .puzzle-panel-list-item-name {
+      // TODO: Do I like this?
+      text-decoration: underline;
+    }
+  }
+
+  &.loading {
+    
+  }
+}
+
+.puzzle-panel-list-item-name {
+  font-weight: bold;
+  flex-grow: 1;
+}
+

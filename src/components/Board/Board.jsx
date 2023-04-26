@@ -1,59 +1,22 @@
-import React, { useEffect } from 'react';
+import React, { 
+  useEffect,
+  useState,
+} from 'react';
 
 import "./Board.scss";
 
 const PUZZLE_FILL_CHAR = "*";
 const PUZZLE_SQUARE_DELIMITER = ","
 
-const TEMP_PUZZLE_DATA = {
-  colors: [
-    "#ff0000",
-    "#0000ff",
-    "#00ffff",
-  ],
-  puzzle: [
-    // 3 x 3
-    // ["0","1","0"],
-    // ["0","1","0"],
-    // ["0","1","0"],
-
-    // 8 x 8 
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","2","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-    ["0","1","0","1","0","1","0","1"],
-
-
-    // 15 x 15
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],
-    // ["0","1","0","1","0","1","0","1","0","1","0","1","0","1","0"],    
-  ],
-};
-
 const Board = ({
   gridViewActive,
-  puzzleData = TEMP_PUZZLE_DATA,
+  puzzleData,
   puzzleGrid,
   puzzleOpacity,
   togglePuzzleGridSquare,
 }) => {
+  const [ mouseButtonDown, setMouseButtonDown ] = useState(false);
+
   const { colors } = puzzleData;
 
   // parse the puzzle array form the string
@@ -70,7 +33,6 @@ const Board = ({
     const splitPuzzleData = puzzleData.puzzle.split(PUZZLE_SQUARE_DELIMITER);
     let squareIndex = 0;
 
-    // WARNING: you might be crossing up the x/y here; make sure to check
     for (let y = 0; y < height; y++) {
       result.push([]);
 
@@ -121,11 +83,17 @@ const Board = ({
   }
 
   useEffect(() => {
-    console.log("Board: Received puzzleData: ", puzzleData);
+    // console.log("Board: Received puzzleData: ", puzzleData);
+    // bind listener for mouseButtonDown
+
   }, []);
 
   return ( 
-    <div className="board board-wrapper">
+    <div 
+      className="board board-wrapper"
+      onMouseDown={() => setMouseButtonDown(true)}
+      onMouseUp={() => setMouseButtonDown(false)}
+    >
       {
         puzzleIsValid() && puzzle.map((rowData, index) => (
           <Row
@@ -133,6 +101,7 @@ const Board = ({
             getColorFromSquareData={getColorFromSquareData}
             gridViewActive={gridViewActive}
             key={`row-${index}`}
+            mouseButtonDown={mouseButtonDown}
             parseSquareData={parseSquareData}
             puzzleGrid={puzzleGrid}
             puzzleOpacity={puzzleOpacity}
@@ -149,6 +118,7 @@ function Row ({
   colors,
   getColorFromSquareData,
   gridViewActive,
+  mouseButtonDown,
   parseSquareData,
   puzzleGrid,
   puzzleOpacity,
@@ -166,6 +136,7 @@ function Row ({
             gridViewActive={gridViewActive}
             key={`square-${index}`}
             // isFilled={false}
+            mouseButtonDown={mouseButtonDown}
             parseSquareData={parseSquareData}
             puzzleGrid={puzzleGrid}
             puzzleOpacity={puzzleOpacity}
@@ -182,6 +153,7 @@ function Square ({
   // color = "#FF0000", 
   gridViewActive,
   // isFilled,
+  mouseButtonDown,
   parseSquareData,
   puzzleGrid,
   puzzleOpacity = .75,
@@ -189,11 +161,11 @@ function Square ({
   togglePuzzleGridSquare,
 }) {
   const { color, colorIndex, pixelCount } = (() => {
-    console.log(`parsingSquareData for ${squareData}...`);
-    const timeStarted = Date.now();
+    // console.log(`parsingSquareData for ${squareData}...`);
+    // const timeStarted = Date.now();
     const result = parseSquareData(squareData);
-    const timeElapsed = Date.now() - timeStarted;
-    console.log(`parsedSquareData in ${timeElapsed}`);
+    // const timeElapsed = Date.now() - timeStarted;
+    // console.log(`parsedSquareData in ${timeElapsed}`);
     return result;
   })();
 
@@ -211,17 +183,17 @@ function Square ({
 
   const toggleSquare = () => gridViewActive && togglePuzzleGridSquare(pixelCount);
 
-  const getSquareColor = () => {
-    if (!gridViewActive) {
-      return color;
-    }
-
-    return isFilled ? fillColor : emptyColor;
-  }
-
   const getPuzzleSquareColor = () => isFilled ? fillColor : emptyColor;
 
   const getPuzzleGridOpacity = () => gridViewActive ? puzzleOpacity : 0;
+
+
+  // TODO: Use these to build click and drag functionality
+
+  const handleMouseIn = (event) => {
+    console.log(`handleMouseIn firing on Square ${pixelCount}`, event);
+    mouseButtonDown && toggleSquare();
+  };
 
   const handleMouseOut = (event) => {
     console.log(`handleMouseOut firing on Square ${pixelCount}`, event);
@@ -230,8 +202,11 @@ function Square ({
   return (
     <div 
       className="board-square"
-      onClick={toggleSquare}
-      onMouseLeave={handleMouseOut}
+      // onClick={toggleSquare}
+      onMouseDown={toggleSquare}
+      // TODO: Uncomment when working on click-and-drag functionality
+      onMouseEnter={handleMouseIn}
+      // onMouseLeave={handleMouseOut}
     >
       <svg
         height={squareSize + (2 * containerPadding)}

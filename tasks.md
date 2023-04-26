@@ -1,0 +1,14 @@
+# TODO
+- [ ] Make login form not close and give an error on an unrecogized user
+- [x] Make Delete button in `LoadPuzzlesPanel` require 2 clicks to avoid accidental deletion - `LoadPuzzlesPanel.jsx`
+- [x] Write function to sum up grid rows into numbers - `utils/new`
+  - `0,1,1,0,1` becomes `2 1`
+- [x] Use `rotate2dArray` and the above function to add row/col nums for actual count  - `App.jsx` 
+- [x] Make sure puzzles are being saved with all relevant data
+- [ ] Figure out a way to save puzzleGrid so that puzzles can be reloaded and revised
+- [ ] After puzzle is saved, make the `savedPuzzleId` state item is being properly set - `App.jsx`
+- [ ] Implement a way to load old puzzles when clicking an item in the `LoadPuzzlePanel` - `App.jsx` and `LoadPuzzlePanel.jsx`
+- [ ] Implement the `updatePuzzle` function - `api.js`
+- [ ] Use the `updatePuzzle` function when saving an existing puzzle - `ControlBar.jsx`
+- [ ] Work on `Board` click and drag functionality - `Board.jsx`
+- [ ] Text Brett about doing a zoom meeting to show the functionality and discuss how the puzzles will come together

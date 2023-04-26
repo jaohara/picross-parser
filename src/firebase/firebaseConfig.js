@@ -1,8 +1,6 @@
 // import dotenv from 'dotenv';
 // dotenv.config();
 
-
-
 // const devConfig = {
 export const devConfig = {
   apiKey: import.meta.env.VITE_DEV_API_KEY,
