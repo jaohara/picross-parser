@@ -23,6 +23,7 @@ import {
 
 import { 
   createPuzzle,
+  updatePuzzle,
 } from "./firebase/api";
 
 import callbackIsValid from './utils/callbackIsValid';
@@ -44,6 +45,7 @@ function App() {
   const {
     addUserPuzzle,
     deleteUserPuzzle,
+    updateUserPuzzle,
     user,
     userPuzzles,
   } = useContext(UserContext);
@@ -53,7 +55,7 @@ function App() {
   const [ imageError, setImageError ] = useState(null);
   const [ loginWindowMode, setLoginWindowMode ] = useState("disabled");
   const [ loadPuzzlePanelActive, setLoadPuzzlePanelActive ] = useState(false);
-  const [ name, setName ] = useState(DEFAULT_NAME);
+  const [ puzzleName, setPuzzleName ] = useState(DEFAULT_NAME);
   const [ puzzleData, setPuzzleData ] = useState(null);
   // TODO: Not sure if I like this name - this is the B&W grid for the puzzle
   const [ puzzleGrid, setPuzzleGrid ] = useState([]);
@@ -113,20 +115,54 @@ function App() {
         authorId: user.uid,
         colNumbers: colNumbers,
         gridHash: gridHash,
-        name: name,
+        grid: JSON.stringify(puzzleGrid),
+        name: puzzleName,
         rowNumbers: rowNumbers,
       };
+
+      console.log("savePuzzle: puzzleGrid in state:", puzzleGrid);
+      console.log("savePuzzle: newPuzzleData.grid:", newPuzzleData.grid);
       
-      // console.log("savePuzzleDataToDatabase: current puzzleData:", newPuzzleData);
+      console.log("savePuzzle: current puzzleData:", newPuzzleData);
       callbackIsValid(setButtonLock) && setButtonLock(true);
-      const createdPuzzleData = await createPuzzle(newPuzzleData);
-      addUserPuzzle(createdPuzzleData);
-      setSavedPuzzleId(newPuzzleData.id);
+
+      // puzzle is new, so create it
+      if (!savedPuzzleId) {
+        const createdPuzzleData = await createPuzzle(newPuzzleData);
+        addUserPuzzle(createdPuzzleData);
+        setSavedPuzzleId(createdPuzzleData.id);
+      }
+      // puzzle exists, so update it
+      else {
+        newPuzzleData.id = savedPuzzleId;
+        // TODO: handle this better - not sure what updatePuzzle should return -
+        //  maybe a boolean, and just call `updateUserPuzzle(newPuzzleData)` on success?
+        const updatedPuzzleData = await updatePuzzle(newPuzzleData);
+        updateUserPuzzle(updatedPuzzleData);
+      }
+      
       callbackIsValid(setButtonLock) && setButtonLock(false);
     };
 
     savePuzzle();
   };
+
+  const loadPuzzle = (loadedPuzzleData) => {
+    if (!loadPuzzle) {
+      console.error("loadPuzzle: loadedPuzzleData is undefined.");
+      return;
+    }
+
+    const loadedPuzzleGrid = loadedPuzzleData.grid;
+    const loadedPuzzleId = loadedPuzzleData.id;
+    // delete loadedPuzzleData.grid;
+    // delete loadedPuzzleData.id;
+
+    setPuzzleData(loadedPuzzleData);
+    setSavedPuzzleId(loadedPuzzleId);
+    setPuzzleGrid(loadedPuzzleGrid);
+    setPuzzleName(loadedPuzzleData.name);
+  }
   
   const toggleLoginWindow = () => 
     setLoginWindowMode(loginWindowMode === "disabled" ? "login" : "disabled");
@@ -138,7 +174,7 @@ function App() {
 
   const resetImage = useCallback(() => {
     // probably needs more logic?
-    setName(DEFAULT_NAME);
+    setPuzzleName(DEFAULT_NAME);
     setPuzzleData(null);
     setSavedPuzzleId(null);
     resetImageError();
@@ -185,6 +221,7 @@ function App() {
       <ControlBar 
         hasImage={hasImage}
         hasShadow={loginWindowMode !== "disabled"}
+        loadPuzzle={loadPuzzle}
         resetImage={resetImage}
         savePuzzleDataToDb={savePuzzleDataToDb}
         toggleLoadPuzzlePanel={toggleLoadPuzzlePanel}
@@ -199,7 +236,9 @@ function App() {
 
       <LoadPuzzlePanel
         deleteUserPuzzle={deleteUserPuzzle}
+        loadPuzzle={loadPuzzle}
         panelIsActive={loadPuzzlePanelActive}
+        toggleLoadPuzzlePanel={toggleLoadPuzzlePanel}
         userPuzzles={userPuzzles}
       />
 
@@ -218,10 +257,10 @@ function App() {
         />
         <ImageMetadata
           imageError={imageError}
-          name={name}
+          name={puzzleName}
           puzzleData={puzzleData}
           puzzleGridString={puzzleGridString}
-          setName={setName}
+          setName={setPuzzleName}
         />
 
         {

@@ -46,6 +46,15 @@
   &:hover {
     background-color: g.$puzzle-panel-list-item-hover-background-color;
     cursor: pointer;
+
+    .puzzle-panel-list-item-name {
+      // TODO: Do I like this?
+      text-decoration: underline;
+    }
+  }
+
+  &.loading {
+    
   }
 }
 

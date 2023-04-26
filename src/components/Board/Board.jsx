@@ -1,4 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { 
+  useEffect,
+  useState,
+} from 'react';
 
 import "./Board.scss";
 
@@ -12,6 +15,8 @@ const Board = ({
   puzzleOpacity,
   togglePuzzleGridSquare,
 }) => {
+  const [ mouseButtonDown, setMouseButtonDown ] = useState(false);
+
   const { colors } = puzzleData;
 
   // parse the puzzle array form the string
@@ -78,11 +83,17 @@ const Board = ({
   }
 
   useEffect(() => {
-    console.log("Board: Received puzzleData: ", puzzleData);
+    // console.log("Board: Received puzzleData: ", puzzleData);
+    // bind listener for mouseButtonDown
+
   }, []);
 
   return ( 
-    <div className="board board-wrapper">
+    <div 
+      className="board board-wrapper"
+      onMouseDown={() => setMouseButtonDown(true)}
+      onMouseUp={() => setMouseButtonDown(false)}
+    >
       {
         puzzleIsValid() && puzzle.map((rowData, index) => (
           <Row
@@ -90,6 +101,7 @@ const Board = ({
             getColorFromSquareData={getColorFromSquareData}
             gridViewActive={gridViewActive}
             key={`row-${index}`}
+            mouseButtonDown={mouseButtonDown}
             parseSquareData={parseSquareData}
             puzzleGrid={puzzleGrid}
             puzzleOpacity={puzzleOpacity}
@@ -106,6 +118,7 @@ function Row ({
   colors,
   getColorFromSquareData,
   gridViewActive,
+  mouseButtonDown,
   parseSquareData,
   puzzleGrid,
   puzzleOpacity,
@@ -123,6 +136,7 @@ function Row ({
             gridViewActive={gridViewActive}
             key={`square-${index}`}
             // isFilled={false}
+            mouseButtonDown={mouseButtonDown}
             parseSquareData={parseSquareData}
             puzzleGrid={puzzleGrid}
             puzzleOpacity={puzzleOpacity}
@@ -139,6 +153,7 @@ function Square ({
   // color = "#FF0000", 
   gridViewActive,
   // isFilled,
+  mouseButtonDown,
   parseSquareData,
   puzzleGrid,
   puzzleOpacity = .75,
@@ -177,6 +192,7 @@ function Square ({
 
   const handleMouseIn = (event) => {
     console.log(`handleMouseIn firing on Square ${pixelCount}`, event);
+    mouseButtonDown && toggleSquare();
   };
 
   const handleMouseOut = (event) => {
@@ -186,9 +202,10 @@ function Square ({
   return (
     <div 
       className="board-square"
-      onClick={toggleSquare}
+      // onClick={toggleSquare}
+      onMouseDown={toggleSquare}
       // TODO: Uncomment when working on click-and-drag functionality
-      // onMouseEnter={handleMouseIn}
+      onMouseEnter={handleMouseIn}
       // onMouseLeave={handleMouseOut}
     >
       <svg

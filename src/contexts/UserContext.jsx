@@ -28,11 +28,27 @@ function UserContextProvider(props) {
   const [ user, setUser ] = useState(auth.currentUser);
   const [ userPuzzles, setUserPuzzles ] = useState([]);
 
+  // adds a new puzzle to the local userPuzzlesData
   const addUserPuzzle = (newPuzzleData) => setUserPuzzles([newPuzzleData, ...userPuzzles]);
 
+  // deletes a puzzle remotely and removes it from the local userPuzzlesData
   const deleteUserPuzzle = (removedPuzzleData) => {
     deletePuzzle(removedPuzzleData);
     setUserPuzzles(userPuzzles.filter((puzzle) => puzzle.id !== removedPuzzleData.id))
+  }
+
+  // replaces an existing puzzle in the local userPuzzlesData
+  const updateUserPuzzle = (updatedPuzzleData) => {
+    const newUserPuzzles = userPuzzles;
+
+    const targetIndex = 
+      newUserPuzzles.findIndex((puzzle) => puzzle.id === updatedPuzzleData.id);
+
+    if (targetIndex !== -1) {
+      newUserPuzzles[targetIndex] = updatedPuzzleData;
+    }
+
+    setUserPuzzles(newUserPuzzles);
   }
 
   const logout = () => {
@@ -126,6 +142,7 @@ function UserContextProvider(props) {
         logout,
         logUser,
         register,
+        updateUserPuzzle,
         user,
         userPuzzles,
       }}

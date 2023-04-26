@@ -140,54 +140,9 @@ function Controls ({
           </>
         )
       }
-
-      {/* <PuzzlePane
-        paneIsActive={puzzlePanelActive}
-        // paneIsActive={true}
-        userPuzzles={userPuzzles}
-      /> */}
-
     </div>
   )
 }
 
-function PuzzlePane({
-  paneIsActive,
-  userName,
-  userPuzzles,
-}) {
-  // how does this receive the list of user puzzles? Should it be in a context or 
-  //  passed down?
-
-
-  const getClassNamesString = () => `
-    puzzle-pane
-    ${paneIsActive ? "active" : ""}
-  `;
-
-  const puzzlesAreValid = userPuzzles && Array.isArray(userPuzzles) && userPuzzles.length > 0;
-
-  const puzzleListItems = puzzlesAreValid ? userPuzzles.map(puzzle => (
-    <li>
-      <div className="puzzle-list-item-wrapper">
-        {puzzle}
-      </div>
-    </li>
-  )) : (
-    <li className='puzzle-list-empty'>
-      You haven't created any puzzles.
-    </li>
-  );
-
-  return (
-    <div className={getClassNamesString()}>
-      <h1>Saved Puzzles</h1>
-
-      <ul>
-        {puzzleListItems}
-      </ul>
-    </div>
-  );
-};
  
 export default ControlBar;
