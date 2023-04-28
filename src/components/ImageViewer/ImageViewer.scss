@@ -3,8 +3,10 @@
 .image-viewer {
   display: flex;
   flex-direction: column;
-  height: calc(100vh - g.$app-padding-top - g.$app-body-padding - g.$app-body-padding);
+  // height: calc(100vh - g.$app-padding-top - g.$app-body-padding - g.$app-body-padding);
+  height: g.$image-pane-height;
   justify-content: space-between;
+  width: 65vw;
 }
 
 .implementation-details {

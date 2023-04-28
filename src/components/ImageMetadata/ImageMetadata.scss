@@ -4,7 +4,9 @@
 .image-metadata {
   align-items: center;
   display: flex;
+  height: g.$image-pane-height;
   justify-content: center;
+  width: 33vw;
 }
 
 .puzzle-data {

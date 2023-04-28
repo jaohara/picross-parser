@@ -19,6 +19,7 @@ $ui-fast-transition: 100ms;
 $app-padding-top: 5.4rem;
 $app-body-padding: .5rem;
 $message-icon-font-size: 10rem;
+$image-pane-height: calc(100vh - $app-padding-top - $app-body-padding - $app-body-padding);
 
 // colors (specific)
 $dark-gray-100: #626466;
