@@ -2,6 +2,7 @@
 import { 
   addDoc, 
   collection,
+  collectionGroup,
   deleteDoc,
   doc,
   getDoc,
@@ -22,6 +23,13 @@ const puzzlesCollectionRef = collection(db, "puzzles");
 
 const gridSubcollectionDocId = "answer";
 const makeGridSubdocFromGridString = (grid) => ({ gridString: grid }); 
+
+
+// helper function for getting references to all subcollections from a documentReference
+async function getSubcollections(documentRef) {
+  const collections = await getDocs(query(collectionGroup(db, documentRef.id)));
+  return collections.docs.map((doc) => doc.ref);
+}
 
 // user-related api functions
 export async function createUserEntity(newUser, id) {
@@ -160,11 +168,27 @@ export async function deletePuzzle(puzzleData){
   console.log("api: deletePuzzle: received puzzleData:", puzzleData);
   const puzzleId = puzzleData.id;
 
+  // create a batch for deleting the puzzleData.grid subcollection along with the puzzle
+  const batch = writeBatch(db);
+
   // get a reference to the puzzle to be deleted
   const puzzleDocRef = doc(puzzlesCollectionRef, puzzleId);
 
   // delete the doc
-  await deleteDoc(puzzleDocRef);
+  // await deleteDoc(puzzleDocRef);
+  batch.delete(puzzleDocRef);
+
+  // get the grid subcollection
+  const subcollections = await getSubcollections(puzzleDocRef);
+
+  // delete all documents in each subcollection (should only be "grid" in this case)
+  subcollections.forEach((subcollectionRef) => {
+    const subcollectionQuery = query(collectionGroup(db, subcollectionRef.id));
+    batch.delete(subcollectionQuery);
+  });
+
+  // commit the batched delete operation
+  await batch.commit();
 }
 
 export async function getPuzzleGridForPuzzle(puzzleData) {
