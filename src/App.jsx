@@ -9,6 +9,8 @@ import {
 // import { Sha256 } from '@aws-crypto/sha256-js';
 import { createHash } from 'sha256-uint8array';
 
+
+
 import "./styles/App.scss";
 
 import ControlBar from "./components/ControlBar/ControlBar";
@@ -27,6 +29,7 @@ import {
 } from "./firebase/api";
 
 import callbackIsValid from './utils/callbackIsValid';
+import hashPuzzleGrid from './utils/hashPuzzleGrid';
 import rotate2dArray from './utils/rotate2dArray';
 import sumRowNumbers from './utils/sumRowNumbers';
 import splitPuzzleGridByRowWidth from './utils/splitPuzzleGridByRowWidth';
@@ -94,8 +97,10 @@ function App() {
 
     const savePuzzle = async () => {
       // create a hash from the puzzle name and solution
-      const gridHashInput = `${puzzleData.name}${puzzleGrid}`;
-      const gridHash = createHash().update(gridHashInput).digest("hex");
+      // const gridHashInput = `${puzzleData.name}${puzzleGrid}`;
+      // const gridHash = createHash().update(gridHashInput).digest("hex");
+
+      const gridHash = hashPuzzleGrid(puzzleGrid, puzzleData.name);
 
       // split the puzzleGrid (solution) and get a rotated copy for columns
       const splitPuzzleGrid = splitPuzzleGridByRowWidth(puzzleGrid, puzzleData.width);
