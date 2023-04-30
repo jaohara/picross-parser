@@ -15,20 +15,24 @@ import TextInput from '../TextInput/TextInput';
 
 const ImageMetadata = ({
   imageError,
-  name, 
+  puzzleName, 
   puzzleData,
   puzzleGridString,
-  setName,
+  puzzleGroup,
+  setPuzzleName,
+  setPuzzleGroup,
 }) => {
   return ( 
     <Pane className="image-metadata">
       {
         puzzleData ? (
           <PuzzleData 
-            name={name}
             puzzleData={puzzleData}
             puzzleGridString={puzzleGridString}
-            setName={setName}
+            puzzleGroup={puzzleGroup}
+            puzzleName={puzzleName}
+            setPuzzleGroup={setPuzzleGroup}
+            setPuzzleName={setPuzzleName}
           />
         ) : (
           <NoPuzzleMessage />
@@ -52,49 +56,36 @@ function NoPuzzleMessage () {
 }
 
 function PuzzleData ({ 
-  name,
+  puzzleName,
   puzzleData,
   puzzleGridString,
-  setName,
+  puzzleGroup,
+  setPuzzleGroup,
+  setPuzzleName,
 }) {
   const { 
     colors,
-    // grid, 
     puzzle,
   } = puzzleData;
 
   return (
     <div className="puzzle-data">
       <h1>Puzzle Data</h1>
-      {/* <strong>puzzleData</strong>:{ }{JSON.stringify(puzzleData)} */}
       <div className="puzzle-data-inputs">
 
-
-        {/* 
-        
-          TODO: These need to be optimized - right now, when the value 
-          changes, it causes the Board child of App to also be redrawn.
-
-          How do I fix this? What if I had the value managed by the text input itself,
-          and then submitted when it loses focus? 
-            - What happens if this never fires, such as when a user clicks the
-              "Save Image" button without blurring the TextInput?
-            - 
-
-        */}
         <TextInput
           key={"puzzle-name-text-input"}
           label={"Name"}
-          setValue={setName}
-          value={name}
+          setValue={setPuzzleName}
+          value={puzzleName}
         />
         
-        {/* <TextInput
+        <TextInput
           key={"author-name-text-input"}
-          label={"Made By"}
-          setValue={setAuthor}
-          value={author}
-        /> */}
+          label={"Group (optional)"}
+          setValue={setPuzzleGroup}
+          value={puzzleGroup}
+        />
       </div>
 
       <ColorPalette

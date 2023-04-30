@@ -59,6 +59,7 @@ function App() {
   const [ loginWindowMode, setLoginWindowMode ] = useState("disabled");
   const [ loadPuzzlePanelActive, setLoadPuzzlePanelActive ] = useState(false);
   const [ puzzleName, setPuzzleName ] = useState(DEFAULT_NAME);
+  const [ puzzleGroup, setPuzzleGroup ] = useState("");
   const [ puzzleData, setPuzzleData ] = useState(null);
   // TODO: Not sure if I like this name - this is the B&W grid for the puzzle
   const [ puzzleGrid, setPuzzleGrid ] = useState([]);
@@ -121,6 +122,7 @@ function App() {
         colNumbers: colNumbers,
         gridHash: gridHash,
         grid: JSON.stringify(puzzleGrid),
+        group: puzzleGroup,
         name: puzzleName,
         rowNumbers: rowNumbers,
       };
@@ -165,10 +167,15 @@ function App() {
 
     console.log("loadPuzzle: given loadedPuzzleData:", loadedPuzzleData);
 
+    const returnValueOrEmptyString = (value) => value ? value : "";
+
     setPuzzleData(loadedPuzzleData);
     setSavedPuzzleId(loadedPuzzleId);
     setPuzzleGrid(loadedPuzzleGrid);
+    // setPuzzleName(returnValueOrEmptyString(loadedPuzzleData.name));
     setPuzzleName(loadedPuzzleData.name);
+    // setPuzzleGroup(returnValueOrEmptyString(loadedPuzzleData.group));
+    setPuzzleGroup(loadedPuzzleData.group);
   }
   
   const toggleLoginWindow = () => 
@@ -275,10 +282,12 @@ function App() {
         />
         <ImageMetadata
           imageError={imageError}
-          name={puzzleName}
           puzzleData={puzzleData}
           puzzleGridString={puzzleGridString}
-          setName={setPuzzleName}
+          puzzleGroup={puzzleGroup}
+          puzzleName={puzzleName}
+          setPuzzleGroup={setPuzzleGroup}
+          setPuzzleName={setPuzzleName}
         />
 
         {

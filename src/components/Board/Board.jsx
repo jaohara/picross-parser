@@ -93,6 +93,7 @@ const Board = ({
       className="board board-wrapper"
       onMouseDown={() => setMouseButtonDown(true)}
       onMouseUp={() => setMouseButtonDown(false)}
+      onMouseLeave={() => setMouseButtonDown(false)}
     >
       {
         puzzleIsValid() && puzzle.map((rowData, index) => (
