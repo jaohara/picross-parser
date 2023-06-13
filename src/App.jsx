@@ -135,6 +135,7 @@ function App() {
       console.log("savePuzzle: puzzleGrid in state:", puzzleGrid);
       console.log("savePuzzle: newPuzzleData.grid:", newPuzzleData.grid);
       
+      
       console.log("savePuzzle: current puzzleData:", newPuzzleData);
       callbackIsValid(setButtonLock) && setButtonLock(true);
 
