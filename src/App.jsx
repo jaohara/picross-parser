@@ -116,6 +116,9 @@ function App() {
       const rowNumbers = getGridNumbers(splitPuzzleGrid);
       const colNumbers = getGridNumbers(rotatedPuzzleGrid);
 
+      // compute minimum moves
+      const minimumMoves = puzzleGrid.reduce((sum, current) => sum + current, 0);
+
       const newPuzzleData = {
         ...puzzleData,
         author: user.displayName,
@@ -124,6 +127,7 @@ function App() {
         gridHash: gridHash,
         grid: JSON.stringify(puzzleGrid),
         group: puzzleGroup,
+        minimumMoves: minimumMoves,
         name: puzzleName,
         rowNumbers: rowNumbers,
       };
