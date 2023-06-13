@@ -112,7 +112,7 @@ export async function getUserPuzzles(
   // build query to get all puzzles for the given authorId
   const userPuzzlesQuery = query(
     puzzlesCollectionRef, 
-    where("authorId", "==", authorId),
+    // where("authorId", "==", authorId),
     orderBy(orderByField, "desc"),
   );
   

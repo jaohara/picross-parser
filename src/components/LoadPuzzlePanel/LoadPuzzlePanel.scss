@@ -33,6 +33,11 @@
   padding: 0rem;
 }
 
+.puzzle-panel-list-wrapper {
+  max-height: 500px;
+  overflow: scroll;
+}
+
 .puzzle-panel-list-item {
   align-items: center;
   background-color: transparent;

@@ -45,9 +45,11 @@ const LoadPuzzlePanel = ({
       <div className="puzzle-panel">
         <h1>Saved Puzzles</h1>
 
-        <ul className="puzzle-panel-list">
-          {puzzleListItems}
-        </ul>
+        <div className="puzzle-panel-list-wrapper">
+          <ul className="puzzle-panel-list">
+            {puzzleListItems}
+          </ul>
+        </div>
       </div>
     </div>
   );
