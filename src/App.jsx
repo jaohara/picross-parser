@@ -101,7 +101,8 @@ function App() {
       // const gridHashInput = `${puzzleData.name}${puzzleGrid}`;
       // const gridHash = createHash().update(gridHashInput).digest("hex");
 
-      const gridHash = hashPuzzleGrid(puzzleGrid, puzzleData.name);
+      // const gridHash = hashPuzzleGrid(puzzleGrid, puzzleData.name);
+      const gridHash = hashPuzzleGrid(puzzleGrid, puzzleName);
 
       // split the puzzleGrid (solution) and get a rotated copy for columns
       const splitPuzzleGrid = splitPuzzleGridByRowWidth(puzzleGrid, puzzleData.width);
