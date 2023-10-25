@@ -22,16 +22,16 @@ export default function splitPuzzleGridByRowWidth (puzzleGrid, rowWidth) {
 }
 
 function testSplitPuzzleGridByRowWidth() {
-  // const testArray = Array.from(Array(25 + 1).keys()).slice(1);
+  const testArray = Array.from(Array(25 + 1).keys()).slice(1);
   // const testArray = Array.from(Array(100 + 1).keys()).slice(1);
-  const testArray = Array.from(Array(225 + 1).keys()).slice(1);
-  // const testRowWidth = 5;
+  // const testArray = Array.from(Array(225 + 1).keys()).slice(1);
+  const testRowWidth = 5;
   // const testRowWidth = 10;
-  const testRowWidth = 15;
+  // const testRowWidth = 15;
   const result = splitPuzzleGridByRowWidth(testArray, testRowWidth);
 
   console.log(`input: `, testArray);
   console.log(`result: `, result);
 };
 
-// testSplitPuzzleGridByRowWidth();
+testSplitPuzzleGridByRowWidth();
