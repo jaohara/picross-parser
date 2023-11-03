@@ -119,6 +119,7 @@ function App() {
       // compute minimum moves
       const minimumMoves = puzzleGrid.reduce((sum, current) => sum + current, 0);
 
+
       const newPuzzleData = {
         ...puzzleData,
         author: user.displayName,
